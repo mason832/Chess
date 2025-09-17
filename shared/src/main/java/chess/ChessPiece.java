@@ -55,33 +55,64 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         var ret = new ArrayList<ChessMove>();
-        if (getPieceType() == PieceType.BISHOP) {
+        if (getPieceType() == PieceType.BISHOP) bishop_move(board, myPosition, ret);
 
-            int c = myPosition.getColumn();
-            for (int r = myPosition.getRow() + 1; r != 9; r++) {
-                if (++c > 8) break;
-                ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
-            }
+        else if (getPieceType() == PieceType.KING) king_move(board, myPosition, ret);
 
-            c = myPosition.getColumn();
-            for (int r = myPosition.getRow() + 1; r != 9; r++) {
-                if (--c == 0) break;
-                ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
-            }
+        else if (getPieceType() == PieceType.KNIGHT) knight_move(board, myPosition, ret);
 
-            c = myPosition.getColumn();
-            for (int r = myPosition.getRow() - 1; r != 0; r--) {
-                if (++c > 8) break;
-                ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
-            }
+        else if (getPieceType() == PieceType.PAWN) pawn_move(board, myPosition, ret);
 
-            c = myPosition.getColumn();
-            for (int r = myPosition.getRow() - 1; r != 0; r--) {
-                if (--c == 0) break;
-                ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
-            }
+        if (getPieceType() == PieceType.ROOK) rook_move(board, myPosition, ret);
+
+        //assume piece is queen
+        else {
+            bishop_move(board, myPosition, ret);
+            rook_move(board, myPosition, ret);
         }
 
         return ret;
+    }
+
+    private static void bishop_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+        int c = myPosition.getColumn();
+        for (int r = myPosition.getRow() + 1; r != 9; r++) {
+            if (++c > 8) break;
+            ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+        }
+
+        c = myPosition.getColumn();
+        for (int r = myPosition.getRow() + 1; r != 9; r++) {
+            if (--c == 0) break;
+            ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+        }
+
+        c = myPosition.getColumn();
+        for (int r = myPosition.getRow() - 1; r != 0; r--) {
+            if (++c > 8) break;
+            ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+        }
+
+        c = myPosition.getColumn();
+        for (int r = myPosition.getRow() - 1; r != 0; r--) {
+            if (--c == 0) break;
+            ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+        }
+    }
+
+    private static void king_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+        //add code here
+    }
+
+    private static void knight_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+        //add code here
+    }
+
+    private static void pawn_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+        //add code here
+    }
+
+    private static void rook_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+        //add code here
     }
 }
