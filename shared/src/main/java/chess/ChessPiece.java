@@ -54,6 +54,34 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return List.of();
+        var ret = new ArrayList<ChessMove>();
+        if (getPieceType() == PieceType.BISHOP) {
+
+            int c = myPosition.getColumn();
+            for (int r = myPosition.getRow() + 1; r != 9; r++) {
+                if (++c > 8) break;
+                ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+            }
+
+            c = myPosition.getColumn();
+            for (int r = myPosition.getRow() + 1; r != 9; r++) {
+                if (--c == 0) break;
+                ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+            }
+
+            c = myPosition.getColumn();
+            for (int r = myPosition.getRow() - 1; r != 0; r--) {
+                if (++c > 8) break;
+                ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+            }
+
+            c = myPosition.getColumn();
+            for (int r = myPosition.getRow() - 1; r != 0; r--) {
+                if (--c == 0) break;
+                ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+            }
+        }
+
+        return ret;
     }
 }
