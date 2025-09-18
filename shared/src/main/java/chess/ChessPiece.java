@@ -131,7 +131,15 @@ public class ChessPiece {
     }
 
     private void knight_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
-        //add code here
+        tile_check(board, myPosition, ret, myPosition.getRow()+2, myPosition.getColumn()+1);
+        tile_check(board, myPosition, ret, myPosition.getRow()+2, myPosition.getColumn()-1);
+        tile_check(board, myPosition, ret, myPosition.getRow()-2, myPosition.getColumn()+1);
+        tile_check(board, myPosition, ret, myPosition.getRow()-2, myPosition.getColumn()-1);
+
+        tile_check(board, myPosition, ret, myPosition.getRow()+1, myPosition.getColumn()+2);
+        tile_check(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()+2);
+        tile_check(board, myPosition, ret, myPosition.getRow()+1, myPosition.getColumn()-2);
+        tile_check(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()-2);
     }
 
     private void pawn_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
@@ -139,7 +147,21 @@ public class ChessPiece {
     }
 
     private void rook_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
-        //add code here
+        for (int r = myPosition.getRow()-1; r != 0; r--) {
+            if (tile_check(board, myPosition, ret, r, myPosition.getColumn())) break;
+        }
+
+        for (int r = myPosition.getRow()+1; r != 9; r++) {
+            if (tile_check(board, myPosition, ret, r, myPosition.getColumn())) break;
+        }
+
+        for (int c = myPosition.getColumn()-1; c != 0; c--) {
+            if (tile_check(board, myPosition, ret, myPosition.getRow(), c)) break;
+        }
+
+        for (int c = myPosition.getColumn()+1; c != 0; c++) {
+            if (tile_check(board, myPosition, ret, myPosition.getRow(), c)) break;
+        }
     }
 
     @Override
