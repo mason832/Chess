@@ -76,14 +76,16 @@ public class ChessPiece {
 
     //checks if there is a piece present
     private boolean tile_check(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret, int r, int c) {
-        if (board.getPiece(new ChessPosition(r, c)) != null) {
-            if (board.getPiece(new ChessPosition(r, c)).pieceColor != this.pieceColor) {
-                ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+        if (r <= 8 && r >= 1 && c <= 8 && c >= 1) {
+
+            if (board.getPiece(new ChessPosition(r, c)) != null) {
+                if (board.getPiece(new ChessPosition(r, c)).pieceColor != this.pieceColor)
+                    ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
                 return true;
             }
-            else return true;
+            ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+            return false;
         }
-        ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
         return false;
     }
 
@@ -109,19 +111,34 @@ public class ChessPiece {
         }
     }
 
-    private static void king_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+    private void king_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+
+        //check top
+        tile_check(board, myPosition, ret, myPosition.getRow() + 1, myPosition.getColumn() - 1);
+        tile_check(board, myPosition, ret, myPosition.getRow() + 1, myPosition.getColumn());
+        tile_check(board, myPosition, ret, myPosition.getRow() + 1, myPosition.getColumn() + 1);
+
+
+        //check sides
+        tile_check(board, myPosition, ret, myPosition.getRow(), myPosition.getColumn()+1);
+        tile_check(board, myPosition, ret, myPosition.getRow(), myPosition.getColumn()-1);
+
+        //check below
+        tile_check(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()+1);
+        tile_check(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn());
+        tile_check(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()-1);
+
+    }
+
+    private void knight_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
         //add code here
     }
 
-    private static void knight_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+    private void pawn_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
         //add code here
     }
 
-    private static void pawn_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
-        //add code here
-    }
-
-    private static void rook_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+    private void rook_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
         //add code here
     }
 
