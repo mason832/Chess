@@ -1,5 +1,4 @@
 package chess;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -89,6 +88,18 @@ public class ChessPiece {
         return false;
     }
 
+    private void promotion_check(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret, ChessPosition move) {
+        if (board.getPiece(move) == null || board.getPiece(move).pieceColor != this.pieceColor) {
+            if (move.getRow() == 8 || move.getRow() == 1) {
+                ret.add(new ChessMove(myPosition, move, PieceType.ROOK));
+                ret.add(new ChessMove(myPosition, move, PieceType.KNIGHT));
+                ret.add(new ChessMove(myPosition, move, PieceType.BISHOP));
+                ret.add(new ChessMove(myPosition, move, PieceType.QUEEN));
+            }
+            else ret.add(new ChessMove(myPosition, move, null));
+        }
+    }
+
     private void bishop_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
         int c = myPosition.getColumn();
         for (int r = myPosition.getRow() + 1; r != 9; r++) {
@@ -143,7 +154,47 @@ public class ChessPiece {
     }
 
     private void pawn_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
-        //add code here
+        if (this.pieceColor == ChessGame.TeamColor.WHITE) {
+            ChessPosition diagnal_right = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
+            ChessPosition diagnal_left = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
+            ChessPosition front = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
+
+            //initial move
+            if (myPosition.getRow() == 2 && board.getPiece(front) == null && board.getPiece(new ChessPosition(4, myPosition.getColumn())) == null) {
+                ret.add(new ChessMove(myPosition, front, null));
+                ret.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+2, myPosition.getColumn()), null));
+            }
+
+            //move forward
+            else if (board.getPiece(front) == null) promotion_check(board, myPosition, ret, front);
+
+            //move diagnal left
+            if (diagnal_left.getColumn() >= 1 && board.getPiece(diagnal_left) != null) promotion_check(board, myPosition, ret, diagnal_left);
+
+            //move diagnal right
+            if (diagnal_right.getColumn() <= 8 && board.getPiece(diagnal_right) != null) promotion_check(board, myPosition, ret, diagnal_right);
+        }
+
+        if (this.pieceColor == ChessGame.TeamColor.BLACK) {
+            ChessPosition diagnal_right = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 1);
+            ChessPosition diagnal_left = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-1);
+            ChessPosition front = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
+
+            //initial move
+            if (myPosition.getRow() == 7 && board.getPiece(front) == null && board.getPiece(new ChessPosition(5, myPosition.getColumn())) == null) {
+                ret.add(new ChessMove(myPosition, front, null));
+                ret.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow()-2, myPosition.getColumn()), null));
+            }
+
+            //move forward
+            else if (board.getPiece(front) == null) promotion_check(board, myPosition, ret, front);
+
+            //move diagnal left
+            if (diagnal_left.getColumn() >= 1 && board.getPiece(diagnal_left) != null) promotion_check(board, myPosition, ret, diagnal_left);
+
+            //move diagnal right
+            if (diagnal_right.getColumn() <= 8 && board.getPiece(diagnal_right) != null) promotion_check(board, myPosition, ret, diagnal_right);
+        }
     }
 
     private void rook_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
