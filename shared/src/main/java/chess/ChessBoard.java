@@ -24,7 +24,6 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
         chess_piece[position.getRow()-1][position.getColumn()-1] = piece;
-        System.out.printf("tile: " + position.getRow() + ", " + position.getColumn() + "\n");
         }
 
     /**
@@ -43,7 +42,6 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-
         //set pawns
         for (int i=1; i!=9; i++) {
             addPiece(new ChessPosition(2, i), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN));

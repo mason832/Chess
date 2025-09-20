@@ -210,7 +210,7 @@ public class ChessPiece {
             if (tile_check(board, myPosition, ret, myPosition.getRow(), c)) break;
         }
 
-        for (int c = myPosition.getColumn()+1; c != 0; c++) {
+        for (int c = myPosition.getColumn()+1; c != 9; c++) {
             if (tile_check(board, myPosition, ret, myPosition.getRow(), c)) break;
         }
     }
