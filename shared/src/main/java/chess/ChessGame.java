@@ -56,9 +56,13 @@ public class ChessGame {
         ArrayList<ChessMove> valid_moves = new ArrayList<>();
 
         for (var move:available_moves) {
-            if (move.getEndPosition().equals(new ChessPosition(3,5))) valid_moves.add(move);
-            else if (move.getEndPosition().equals(new ChessPosition(6,2))) valid_moves.add(move);
-            else if (move.getEndPosition().equals(new ChessPosition(4,4))) valid_moves.add(move);
+            ChessBoard current_board = chess_board;
+
+            chess_board.addPiece(move.getEndPosition(), chess_piece);
+            chess_board.addPiece(move.getStartPosition(), null);
+
+            if (!isInCheck(getTeamTurn())) valid_moves.add(move);
+            chess_board = current_board;
         }
 
         return valid_moves;
@@ -71,7 +75,14 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        if (!validMoves(move.getStartPosition()).contains(move)) throw new InvalidMoveException("invalid move");
+
+        //code here
+
+
+        //next team turn
+        if (getTeamTurn().equals(TeamColor.WHITE)) setTeamTurn(TeamColor.BLACK);
+        else setTeamTurn(TeamColor.WHITE);
     }
 
     /**
