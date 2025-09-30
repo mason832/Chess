@@ -56,13 +56,18 @@ public class ChessGame {
         ArrayList<ChessMove> valid_moves = new ArrayList<>();
 
         for (var move:available_moves) {
-            ChessBoard current_board = chess_board;
+            ChessPiece moved_piece = chess_board.getPiece(move.getStartPosition());
+            ChessPiece removed_piece = chess_board.getPiece(move.getEndPosition());
 
-            chess_board.addPiece(move.getEndPosition(), chess_piece);
+            //play hypothetical move
+            chess_board.addPiece(move.getEndPosition(), moved_piece);
             chess_board.addPiece(move.getStartPosition(), null);
 
             if (!isInCheck(getTeamTurn())) valid_moves.add(move);
-            chess_board = current_board;
+
+            //reset board
+            chess_board.addPiece(move.getEndPosition(), removed_piece);
+            chess_board.addPiece(move.getStartPosition(), moved_piece);
         }
 
         return valid_moves;
@@ -75,14 +80,7 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        if (!validMoves(move.getStartPosition()).contains(move)) throw new InvalidMoveException("invalid move");
-
-        //code here
-
-
-        //next team turn
-        if (getTeamTurn().equals(TeamColor.WHITE)) setTeamTurn(TeamColor.BLACK);
-        else setTeamTurn(TeamColor.WHITE);
+        throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -93,25 +91,28 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         var opposition = new ArrayList<ChessPosition>();
-        ChessPosition king_position = find_king_and_opposition(teamColor, opposition);
-        System.out.println("found king at " + king_position);
+        var king_position = find_king_and_opponents(opposition);
 
-        for (var opponent : opposition) {
-            //add code
+        for (var opponent_position : opposition) {
+            var piece = chess_board.getPiece(opponent_position);
+            var piece_moves = piece.pieceMoves(chess_board, opponent_position);
+
+            for (var move : piece_moves) {
+                if (move.getEndPosition().equals(king_position)) return true;
+            }
         }
         return false;
     }
 
-    private ChessPosition find_king_and_opposition(TeamColor teamColor, ArrayList<ChessPosition> opposition) {
+    private ChessPosition find_king_and_opponents(ArrayList<ChessPosition> opposition) {
         ChessPosition king_position = null;
         for (int i=1; i<=8; i++) {
             for (int j=1; j<=8; j++) {
-                var position = new ChessPosition(i, j);
-                if (chess_board.getPiece(position) != null) {
-                    if (chess_board.getPiece(position).getTeamColor() != teamColor) opposition.add(position);
-                    else if (chess_board.getPiece(position).getPieceType() == ChessPiece.PieceType.KING) {
-                        king_position = position;
-                    }
+                var position = new ChessPosition(i,j);
+                var piece = chess_board.getPiece(position);
+                if (piece != null) {
+                    if (!piece.getTeamColor().equals(getTeamTurn())) opposition.add(position);
+                    else if (piece.getPieceType().equals(ChessPiece.PieceType.KING)) king_position = position;
                 }
             }
         }
