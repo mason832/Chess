@@ -51,6 +51,7 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         if (chess_board.getPiece(startPosition) == null) return null;
 
+        setTeamTurn(chess_board.getPiece(startPosition).getTeamColor());
         var chess_piece = chess_board.getPiece(startPosition);
         ArrayList<ChessMove> available_moves = (ArrayList<ChessMove>) chess_piece.pieceMoves(chess_board, startPosition);
         ArrayList<ChessMove> valid_moves = new ArrayList<>();
@@ -63,7 +64,7 @@ public class ChessGame {
             chess_board.addPiece(move.getEndPosition(), moved_piece);
             chess_board.addPiece(move.getStartPosition(), null);
 
-            if (!isInCheck(getTeamTurn())) valid_moves.add(move);
+            if (!isInCheck(team_turn)) valid_moves.add(move);
 
             //reset board
             chess_board.addPiece(move.getEndPosition(), removed_piece);
@@ -91,7 +92,7 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         var opposition = new ArrayList<ChessPosition>();
-        var king_position = find_king_and_opponents(opposition);
+        var king_position = find_king_and_opponents(teamColor, opposition);
 
         for (var opponent_position : opposition) {
             var piece = chess_board.getPiece(opponent_position);
@@ -102,14 +103,14 @@ public class ChessGame {
         return false;
     }
 
-    private ChessPosition find_king_and_opponents(ArrayList<ChessPosition> opposition) {
+    private ChessPosition find_king_and_opponents(TeamColor teamColor, ArrayList<ChessPosition> opposition) {
         ChessPosition king_position = null;
         for (int i=1; i<=8; i++) {
             for (int j=1; j<=8; j++) {
                 var position = new ChessPosition(i,j);
                 var piece = chess_board.getPiece(position);
                 if (piece != null) {
-                    if (!piece.getTeamColor().equals(getTeamTurn())) opposition.add(position);
+                    if (!piece.getTeamColor().equals(teamColor)) opposition.add(position);
                     else if (piece.getPieceType().equals(ChessPiece.PieceType.KING)) king_position = position;
                 }
             }
