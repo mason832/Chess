@@ -12,7 +12,7 @@ import java.util.Collection;
 public class ChessGame {
 
     ChessBoard chess_board = new ChessBoard();
-    TeamColor team_turn = null;
+    TeamColor team_turn = TeamColor.WHITE;
     public ChessGame() {
 
     }
@@ -97,9 +97,7 @@ public class ChessGame {
             var piece = chess_board.getPiece(opponent_position);
             var piece_moves = piece.pieceMoves(chess_board, opponent_position);
 
-            for (var move : piece_moves) {
-                if (move.getEndPosition().equals(king_position)) return true;
-            }
+            for (var move : piece_moves) if (move.getEndPosition().equals(king_position)) return true;
         }
         return false;
     }
