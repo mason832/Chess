@@ -1,5 +1,6 @@
 package chess;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -85,19 +86,15 @@ public class ChessGame {
         if (chess_board.getPiece(move.getStartPosition()).getTeamColor() != team_turn) throw new InvalidMoveException("not your turn");
         if (!validMoves(move.getStartPosition()).contains(move)) throw new InvalidMoveException("not a valid move");
 
-
-
         var start = move.getStartPosition();
         var end = move.getEndPosition();
         ChessPiece promotion = new ChessPiece(team_turn, move.getPromotionPiece());
-
 
         //make move
         if (promotion.getPieceType() != null) {
             chess_board.addPiece(end, promotion);
             chess_board.addPiece(start, null);
         }
-
         else {
             chess_board.addPiece(end, chess_board.getPiece(start));
             chess_board.addPiece(start, null);
@@ -114,8 +111,10 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        var opposition = new ArrayList<ChessPosition>();
-        var king_position = find_king_and_opponents(teamColor, opposition);
+        ArrayList<ChessPosition> opposition = null;
+        if (teamColor.equals(TeamColor.WHITE)) opposition = find_team(TeamColor.BLACK);
+        else opposition = find_team(TeamColor.WHITE);
+        var king_position = find_king(teamColor);
 
         for (var opponent_position : opposition) {
             var piece = chess_board.getPiece(opponent_position);
@@ -126,19 +125,26 @@ public class ChessGame {
         return false;
     }
 
-    private ChessPosition find_king_and_opponents(TeamColor teamColor, ArrayList<ChessPosition> opposition) {
+    private ChessPosition find_king(TeamColor teamColor) {
         ChessPosition king_position = null;
         for (int i=1; i<=8; i++) {
             for (int j=1; j<=8; j++) {
-                var position = new ChessPosition(i,j);
-                var piece = chess_board.getPiece(position);
-                if (piece != null) {
-                    if (!piece.getTeamColor().equals(teamColor)) opposition.add(position);
-                    else if (piece.getPieceType().equals(ChessPiece.PieceType.KING)) king_position = position;
-                }
+                var piece = chess_board.getPiece(new ChessPosition(i,j));
+                if (piece != null && piece.getPieceType().equals(ChessPiece.PieceType.KING) && piece.getTeamColor().equals(teamColor)) king_position = (new ChessPosition(i,j));
             }
         }
         return king_position;
+    }
+
+    private ArrayList<ChessPosition> find_team (TeamColor teamColor) {
+        var team = new ArrayList<ChessPosition>();
+        for (int i=1; i <=8; i++) {
+            for (int j=1; j<=8; j++) {
+                var piece = chess_board.getPiece(new ChessPosition(i,j));
+                if (piece != null && piece.getTeamColor().equals(teamColor)) team.add(new ChessPosition(i,j));
+            }
+        }
+        return team;
     }
 
     /**
@@ -148,7 +154,12 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        var opposition = new ArrayList<ChessPosition>();
+        var king_position = find_king(teamColor);
+        var team = find_team(teamColor);
+
+
+        return false;
     }
 
     /**
