@@ -25,7 +25,21 @@ public class UserHandler {
         }
 
         catch (DataAccessException exception) {
-            //implement catches
+            //not all information provided
+            if (exception.getMessage().contains("bad request")) ctx.status(400);
+
+            //username is already taken
+            else if (exception.getMessage().contains("already taken")) ctx.status(403);
+
+            //internal failure
+            else ctx.status(500);
+
+            ctx.json(java.util.Map.of("message", exception.getMessage()));
+        }
+
+        catch (Exception exception) {
+            ctx.status(500);
+            ctx.json(java.util.Map.of("message", "Error: " + exception.getMessage()));
         }
     }
 }
