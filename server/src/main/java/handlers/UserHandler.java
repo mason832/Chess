@@ -60,12 +60,14 @@ public class UserHandler {
             ctx.result(gson.toJson(auth));
         }
         catch (DataAccessException e) {
-            ctx.status(401);
-            ctx.result(gson.toJson(new ErrorMessage("unauthorized")));
-        }
-        catch (Exception e) {
-            ctx.status(400);
-            ctx.result(gson.toJson(new ErrorMessage("bad request")));
+            if (e.getMessage().contains("unauthorized")) {
+                ctx.status(401);
+                ctx.result(gson.toJson(new ErrorMessage("unauthorized")));
+            }
+            else if (e.getMessage().contains("bad request")) {
+                ctx.status(400);
+                ctx.result(gson.toJson(new ErrorMessage("bad request")));
+            }
         }
     }
 
