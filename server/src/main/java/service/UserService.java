@@ -29,20 +29,25 @@ public class UserService {
 
         //create authorization token
         String authToken = UUID.randomUUID().toString();
-        AuthData auth = new AuthData(authToken, user.username());
+        AuthData auth = new AuthData(user.username(), authToken);
 
-        //
+        //create authData
         authDAO.createAuth(user.username());
 
         return auth;
     }
 
-    public AuthData login(UserData user) throws DataAccessException {
-        //get user info
-        UserData login = userDAO.getUser(user.username());
+    public AuthData login(UserData login_attempt) throws DataAccessException {
 
-        if (login == null || !login.password().equals(user.password())) throw new DataAccessException("unauthorized");
+        //make sure username and password work
+        if (login_attempt.username() == null || login_attempt.username().isEmpty() || login_attempt.password() == null || login_attempt.password().isEmpty()) {
+            throw new DataAccessException("bad request");
+        }
 
-        return authDAO.createAuth(user.username());
+        UserData account = userDAO.getUser(login_attempt.username());
+
+        if (account == null || !login_attempt.password().equals(account.password())) throw new DataAccessException("unauthorized");
+
+        return authDAO.createAuth(account.username());
     }
 }

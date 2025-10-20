@@ -52,14 +52,6 @@ public class UserHandler {
             //turn json body into a UserData object
             UserData user = gson.fromJson(ctx.body(), UserData.class);
 
-            //make sure username and password work
-            if (user.username() == null || user.username().isEmpty() ||
-                    user.password() == null || user.password().isEmpty()) {
-                ctx.status(400);
-                ctx.result(gson.toJson(new ErrorMessage("bad request")));
-                return;
-            }
-
             //login
             AuthData auth = userService.login(user);
 
