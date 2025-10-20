@@ -8,8 +8,11 @@ public class MemoryAuthDAO implements AuthDAO {
 
     //add new authorization token
     @Override
-    public void createAuth(AuthData auth) {
-        authTokens.put(auth.authToken(), auth);
+    public AuthData createAuth(String username) {
+        String token = java.util.UUID.randomUUID().toString();
+        AuthData auth = new AuthData(username, token);
+        authTokens.put(token, auth);
+        return auth;
     }
 
     //get authorization token

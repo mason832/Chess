@@ -7,6 +7,8 @@ import model.UserData;
 import model.AuthData;
 import service.UserService;
 
+import javax.xml.crypto.Data;
+
 public class UserHandler {
     private final UserService userService;
     private final Gson gson = new Gson();
@@ -17,18 +19,19 @@ public class UserHandler {
 
     public void register(Context ctx) {
         try {
-            // Turn JSON body into a UserData object
+            //turn json body into a UserData object
             UserData user = gson.fromJson(ctx.body(), UserData.class);
 
-            // Call service to register
+            //call service to register
             AuthData auth = userService.register(user);
 
-            // If successful, return JSON response
+            //return json response
             ctx.status(200);
             ctx.result(gson.toJson(auth));
 
-        } catch (DataAccessException e) {
-            // check if user already exists
+        }
+        catch (DataAccessException e) {
+            //check if user already exists
             if (e.getMessage().toLowerCase().contains("taken")) {
                 ctx.status(403);
             }
@@ -38,9 +41,39 @@ public class UserHandler {
             //generic failure
             else ctx.status(500);
 
-            // Return a json object for the error
+            //return a json object for the error
             ctx.result(gson.toJson(new ErrorMessage(e.getMessage())));
 
+        }
+    }
+
+    public void login(Context ctx) {
+        try {
+            //turn json body into a UserData object
+            UserData user = gson.fromJson(ctx.body(), UserData.class);
+
+            //make sure username and password work
+            if (user.username() == null || user.username().isEmpty() ||
+                    user.password() == null || user.password().isEmpty()) {
+                ctx.status(400);
+                ctx.result(gson.toJson(new ErrorMessage("bad request")));
+                return;
+            }
+
+            //login
+            AuthData auth = userService.login(user);
+
+            //success
+            ctx.status(200);
+            ctx.result(gson.toJson(auth));
+        }
+        catch (DataAccessException e) {
+            ctx.status(401);
+            ctx.result(gson.toJson(new ErrorMessage("unauthorized")));
+        }
+        catch (Exception e) {
+            ctx.status(400);
+            ctx.result(gson.toJson(new ErrorMessage("bad request")));
         }
     }
 

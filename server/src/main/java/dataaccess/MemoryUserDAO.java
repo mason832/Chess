@@ -9,7 +9,7 @@ public class MemoryUserDAO implements UserDAO{
     @Override
     public void createUser(UserData user) {
         //check if user already exists and adds them if not
-        users.put(user.username(), user);
+        if (!users.containsKey(user.username())) users.put(user.username(), user);
     }
 
     //returns a user based on given username

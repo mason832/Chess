@@ -2,7 +2,7 @@ package dataaccess;
 import model.AuthData;
 
 public interface AuthDAO {
-    void createAuth(AuthData auth);
+    AuthData createAuth(String username);
 
     AuthData getAuth(String authToken);
 

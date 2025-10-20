@@ -30,8 +30,19 @@ public class UserService {
         //create authorization token
         String authToken = UUID.randomUUID().toString();
         AuthData auth = new AuthData(authToken, user.username());
-        authDAO.createAuth(auth);
+
+        //
+        authDAO.createAuth(user.username());
 
         return auth;
+    }
+
+    public AuthData login(UserData user) throws DataAccessException {
+        //get user info
+        UserData login = userDAO.getUser(user.username());
+
+        if (login == null || !login.password().equals(user.password())) throw new DataAccessException("unauthorized");
+
+        return authDAO.createAuth(user.username());
     }
 }
