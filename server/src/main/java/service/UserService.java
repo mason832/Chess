@@ -21,6 +21,9 @@ public class UserService {
         //make sure username isn't already taken
         if (userDAO.getUser(user.username())!=null) throw new DataAccessException("Error: already taken");
 
+        //create user
+        userDAO.createUser(user);
+
         //create authorization token
         String authToken = UUID.randomUUID().toString();
         AuthData auth = new AuthData(authToken, user.username());

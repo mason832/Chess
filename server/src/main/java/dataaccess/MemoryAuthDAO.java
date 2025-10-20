@@ -8,19 +8,19 @@ public class MemoryAuthDAO implements AuthDAO {
 
     //add new authorization token
     @Override
-    public void createAuth(AuthData auth) throws DataAccessException {
+    public void createAuth(AuthData auth) {
         authTokens.put(auth.authToken(), auth);
     }
 
     //get authorization token
     @Override
-    public AuthData getAuth(String authToken) throws DataAccessException {
+    public AuthData getAuth(String authToken) {
         return authTokens.get(authToken);
     }
 
     //delete specific authorization token
     @Override
-    public void deleteAuth(String authToken) throws DataAccessException {
+    public void deleteAuth(String authToken) {
         authTokens.remove(authToken);
     }
 

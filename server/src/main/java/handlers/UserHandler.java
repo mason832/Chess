@@ -1,11 +1,11 @@
 package handlers;
+
 import com.google.gson.Gson;
 import io.javalin.http.Context;
 import dataaccess.DataAccessException;
 import model.UserData;
 import model.AuthData;
 import service.UserService;
-
 
 public class UserHandler {
     private final UserService userService;
@@ -17,29 +17,32 @@ public class UserHandler {
 
     public void register(Context ctx) {
         try {
+            // Turn JSON body into a UserData object
             UserData user = gson.fromJson(ctx.body(), UserData.class);
+
+            // Call service to register
             AuthData auth = userService.register(user);
 
+            // If successful, return JSON response
             ctx.status(200);
-            ctx.json(auth);
-        }
+            ctx.result(gson.toJson(auth));
 
-        catch (DataAccessException exception) {
-            //not all information provided
-            if (exception.getMessage().contains("bad request")) ctx.status(400);
+        } catch (DataAccessException e) {
+            // check if user already exists
+            if (e.getMessage().toLowerCase().contains("already exists")) ctx.status(403);
 
-            //username is already taken
-            else if (exception.getMessage().contains("already taken")) ctx.status(403);
-
-            //internal failure
+            //generic failure
             else ctx.status(500);
 
-            ctx.json(java.util.Map.of("message", exception.getMessage()));
-        }
+            // Return a json object for the error
+            ctx.result(gson.toJson(new ErrorMessage(e.getMessage())));
 
-        catch (Exception exception) {
-            ctx.status(500);
-            ctx.json(java.util.Map.of("message", "Error: " + exception.getMessage()));
+        } catch (Exception e) {
+            ctx.status(400);
+            ctx.result(gson.toJson(new ErrorMessage("Error: bad request")));
         }
     }
+
+    // Helper record for JSON error responses
+    private record ErrorMessage(String message) {}
 }
