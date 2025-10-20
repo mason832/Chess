@@ -29,7 +29,11 @@ public class UserHandler {
 
         } catch (DataAccessException e) {
             // check if user already exists
-            if (e.getMessage().toLowerCase().contains("already exists")) ctx.status(403);
+            if (e.getMessage().toLowerCase().contains("taken")) {
+                ctx.status(403);
+            }
+
+            else if (e.getMessage().toLowerCase().contains("bad request")) ctx.status(400);
 
             //generic failure
             else ctx.status(500);
@@ -37,9 +41,6 @@ public class UserHandler {
             // Return a json object for the error
             ctx.result(gson.toJson(new ErrorMessage(e.getMessage())));
 
-        } catch (Exception e) {
-            ctx.status(400);
-            ctx.result(gson.toJson(new ErrorMessage("Error: bad request")));
         }
     }
 

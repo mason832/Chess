@@ -16,6 +16,7 @@ public class Server {
         //create data access objects
         MemoryUserDAO userDAO = new MemoryUserDAO();
         MemoryAuthDAO authDAO = new MemoryAuthDAO();
+        MemoryGameDAO gameDAO = new MemoryGameDAO();
 
         //create service object
         UserService userService = new UserService(userDAO, authDAO);

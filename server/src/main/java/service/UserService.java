@@ -16,7 +16,10 @@ public class UserService {
 
     public AuthData register(UserData user) throws DataAccessException {
         //make sure all information is provided
-        if (user.username() == null || user.password() == null || user.email() == null) throw new DataAccessException("Error: bad request");
+        if (user.username() == null || user.username().isEmpty() ||
+                user.password() == null || user.password().isEmpty() ||
+                user.email() == null || user.email().isEmpty())
+        {throw new DataAccessException("Error: bad request");}
 
         //make sure username isn't already taken
         if (userDAO.getUser(user.username())!=null) throw new DataAccessException("Error: already taken");
