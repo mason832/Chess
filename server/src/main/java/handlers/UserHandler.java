@@ -7,7 +7,6 @@ import model.UserData;
 import model.AuthData;
 import service.UserService;
 
-import javax.xml.crypto.Data;
 
 public class UserHandler {
     private final UserService userService;
@@ -63,14 +62,10 @@ public class UserHandler {
             ctx.result(gson.toJson(auth));
         }
         catch (DataAccessException e) {
-            if (e.getMessage().contains("unauthorized")) {
-                ctx.status(401);
-                ctx.result(gson.toJson(new ErrorMessage("unauthorized")));
-            }
-            else if (e.getMessage().contains("bad request")) {
-                ctx.status(400);
-                ctx.result(gson.toJson(new ErrorMessage("bad request")));
-            }
+            if (e.getMessage().contains("unauthorized")) ctx.status(401);
+
+            else if (e.getMessage().contains("bad request")) ctx.status(400);
+
             else {
                 ctx.status(500);
                 ctx.result(gson.toJson(new ErrorMessage("internal server error")));

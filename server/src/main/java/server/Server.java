@@ -1,5 +1,6 @@
 package server;
 
+import handlers.GameHandler;
 import io.javalin.*;
 import dataaccess.*;
 import handlers.UserHandler;
@@ -26,6 +27,7 @@ public class Server {
 
         //create handler object
         UserHandler userHandler = new UserHandler(userService);
+        //GameHandler gameHandler = new GameHandler();
         ClearHandler clearHandler = new ClearHandler(clearService);
 
         // Register your endpoints and exception handlers here.
