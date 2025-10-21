@@ -30,7 +30,7 @@ public class UserService {
         //create authData
         AuthData authData = new AuthData(user.username(), UUID.randomUUID().toString());
 
-        //create authData
+        //add authData
         authDAO.addAuth(authData);
 
         return authData;
