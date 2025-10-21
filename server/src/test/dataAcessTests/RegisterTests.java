@@ -10,20 +10,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RegisterTests {
     private UserService userService;
+    AuthDAO authDAO;
 
     @BeforeEach
     public void setup() {
         UserDAO userDAO = new MemoryUserDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
+        authDAO = new MemoryAuthDAO();
         userService = new UserService(userDAO, authDAO);
     }
 
     @Test
     public void registerSuccess() throws Exception {
         var user = new UserData("bob", "1234", "bob@email.com");
-        var auth = userService.register(user);
-        assertNotNull(auth.authToken());
-        assertEquals("bob", auth.username());
+        var authData = userService.register(user);
+        assertEquals("bob", authDAO.getAuth(authData.authToken()).username());
+        assertEquals(1, authDAO.tokenCount());
     }
 
     @Test
@@ -32,6 +33,7 @@ public class RegisterTests {
         userService.register(user);
         var exception = assertThrows(DataAccessException.class, () -> userService.register(user));
         assertTrue(exception.getMessage().contains("already taken"));
+        assertEquals(1, authDAO.tokenCount());
     }
 
     @Test
@@ -43,6 +45,8 @@ public class RegisterTests {
         var userB = new UserData(null, "1234", "bob@email.com");
         var exceptionB = assertThrows(DataAccessException.class, () -> userService.register(userB));
         assertTrue(exceptionB.getMessage().contains("bad request"));
+
+        assertEquals(0, authDAO.tokenCount());
     }
 
     @Test
@@ -54,6 +58,8 @@ public class RegisterTests {
         var userB = new UserData("bob", null, "bob@email.com");
         var exceptionB = assertThrows(DataAccessException.class, () -> userService.register(userB));
         assertTrue(exceptionB.getMessage().contains("bad request"));
+
+        assertEquals(0, authDAO.tokenCount());
     }
 
     @Test
@@ -65,5 +71,7 @@ public class RegisterTests {
         var userB = new UserData("bob", "1234", null);
         var exceptionB = assertThrows(DataAccessException.class, () -> userService.register(userB));
         assertTrue(exceptionB.getMessage().contains("bad request"));
+
+        assertEquals(0, authDAO.tokenCount());
     }
 }

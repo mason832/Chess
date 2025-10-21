@@ -7,7 +7,7 @@ public class MemoryUserDAO implements UserDAO{
     private final Map<String, UserData> users = new HashMap<>();
 
     @Override
-    public void createUser(UserData user) {
+    public void addUser(UserData user) {
         //check if user already exists and adds them if not
         if (!users.containsKey(user.username())) users.put(user.username(), user);
     }

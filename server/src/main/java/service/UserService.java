@@ -25,16 +25,15 @@ public class UserService {
         if (userDAO.getUser(user.username())!=null) throw new DataAccessException("Error: already taken");
 
         //create user
-        userDAO.createUser(user);
-
-        //create authorization token
-        String authToken = UUID.randomUUID().toString();
-        AuthData auth = new AuthData(user.username(), authToken);
+        userDAO.addUser(user);
 
         //create authData
-        authDAO.createAuth(user.username());
+        AuthData authData = new AuthData(user.username(), UUID.randomUUID().toString());
 
-        return auth;
+        //create authData
+        authDAO.addAuth(authData);
+
+        return authData;
     }
 
     public AuthData login(UserData login_attempt) throws DataAccessException {
@@ -49,7 +48,9 @@ public class UserService {
 
         if (account == null || !login_attempt.password().equals(account.password())) throw new DataAccessException("unauthorized");
 
-        return authDAO.createAuth(account.username());
+        AuthData authData = new AuthData(account.username(), UUID.randomUUID().toString());
+        authDAO.addAuth(authData);
+        return authData;
     }
 
     public void logout(String authToken) throws DataAccessException {

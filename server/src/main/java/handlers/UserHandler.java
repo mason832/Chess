@@ -94,6 +94,7 @@ public class UserHandler {
             }
         }
     }
+
     // Helper record for JSON error responses
     private record ErrorMessage(String message) {}
 }
