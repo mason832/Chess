@@ -5,6 +5,7 @@ import io.javalin.*;
 import dataaccess.*;
 import handlers.UserHandler;
 import service.ClearService;
+import service.GameService;
 import service.UserService;
 import handlers.ClearHandler;
 
@@ -23,11 +24,12 @@ public class Server {
 
         //create service object
         UserService userService = new UserService(userDAO, authDAO);
+        GameService gameService = new GameService(gameDAO, authDAO);
         ClearService clearService = new ClearService(authDAO, gameDAO, userDAO);
 
         //create handler object
         UserHandler userHandler = new UserHandler(userService);
-        //GameHandler gameHandler = new GameHandler();
+        GameHandler gameHandler = new GameHandler(gameService);
         ClearHandler clearHandler = new ClearHandler(clearService);
 
         // Register your endpoints and exception handlers here.
@@ -35,6 +37,7 @@ public class Server {
         javalin.post("/session", userHandler::login);
         javalin.delete("/session", userHandler::logout);
         javalin.delete("/db", clearHandler::clear);
+        javalin.post("/game", gameHandler::createGame);
     }
 
     public int run(int desiredPort) {
