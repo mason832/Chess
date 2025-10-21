@@ -40,7 +40,8 @@ public class UserService {
     public AuthData login(UserData login_attempt) throws DataAccessException {
 
         //make sure username and password work
-        if (login_attempt.username() == null || login_attempt.username().isEmpty() || login_attempt.password() == null || login_attempt.password().isEmpty()) {
+        if (login_attempt.username() == null || login_attempt.username().isEmpty() ||
+                login_attempt.password() == null || login_attempt.password().isEmpty()) {
             throw new DataAccessException("bad request");
         }
 
@@ -49,5 +50,19 @@ public class UserService {
         if (account == null || !login_attempt.password().equals(account.password())) throw new DataAccessException("unauthorized");
 
         return authDAO.createAuth(account.username());
+    }
+
+    public void logout(String authToken) throws DataAccessException {
+        //checks if there's a provided authToken
+        if (authToken == null || authToken.isEmpty()) throw new DataAccessException("unauthorized");
+
+        //get authData
+        AuthData authData = authDAO.getAuth(authToken);
+
+        //check if authToken is valid
+        if (authData == null) throw new DataAccessException("unauthorized");
+
+        //delete autData
+        authDAO.deleteAuth(authToken);
     }
 }

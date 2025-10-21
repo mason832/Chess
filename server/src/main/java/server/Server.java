@@ -28,10 +28,10 @@ public class Server {
         UserHandler userHandler = new UserHandler(userService);
         ClearHandler clearHandler = new ClearHandler(clearService);
 
-
         // Register your endpoints and exception handlers here.
         javalin.post("/user", userHandler::register);
         javalin.post("/session", userHandler::login);
+        javalin.delete("/session", userHandler::logout);
         javalin.delete("/db", clearHandler::clear);
     }
 

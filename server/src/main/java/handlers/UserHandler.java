@@ -71,6 +71,10 @@ public class UserHandler {
         }
     }
 
+    public void logout(Context ctx) {
+        //add code here
+    }
+
     // Helper record for JSON error responses
     private record ErrorMessage(String message) {}
 }

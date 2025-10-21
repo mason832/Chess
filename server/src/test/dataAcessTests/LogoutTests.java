@@ -1,5 +1,5 @@
 package dataAcessTests;
 
-public class ClearTests {
+public class LogoutTests {
     //add code here
 }
