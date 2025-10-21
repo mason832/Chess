@@ -30,7 +30,32 @@ public class LoginTests {
         assertEquals("bob", authData.username());
     }
 
-    public void loginFailWrongPassword() throws Exception {
-        //write code
+    @Test
+    public void loginFailWrongInfo() throws Exception {
+        userService.register(new UserData("bob", "1234", "bob@email.com"));
+
+        var exception = assertThrows(DataAccessException.class, () -> userService.login(new UserData("joe", "1234", null)));
+        assertTrue(exception.getMessage().contains("unauthorized"));
+
+        exception = assertThrows(DataAccessException.class, () -> userService.login(new UserData("bob", "password", null)));
+        assertTrue(exception.getMessage().contains("unauthorized"));
+    }
+
+    @Test
+    public void loginFailMissingInfo() throws Exception {
+        userService.register(new UserData("bob", "1234", "bob@email.com"));
+        DataAccessException exception;
+
+        exception = assertThrows(DataAccessException.class, () -> userService.login(new UserData("", "1234", null)));
+        assertTrue(exception.getMessage().contains("bad request"));
+
+        exception = assertThrows(DataAccessException.class, () -> userService.login(new UserData(null, "1234", null)));
+        assertTrue(exception.getMessage().contains("bad request"));
+
+        exception = assertThrows(DataAccessException.class, () -> userService.login(new UserData("bob", "", null)));
+        assertTrue(exception.getMessage().contains("bad request"));
+
+        exception = assertThrows(DataAccessException.class, () -> userService.login(new UserData("bob", null, null)));
+        assertTrue(exception.getMessage().contains("bad request"));
     }
 }
