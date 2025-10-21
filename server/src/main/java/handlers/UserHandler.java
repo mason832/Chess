@@ -39,7 +39,10 @@ public class UserHandler {
             else if (e.getMessage().toLowerCase().contains("bad request")) ctx.status(400);
 
             //generic failure
-            else ctx.status(500);
+            else {
+                ctx.status(500);
+                ctx.result(gson.toJson(new ErrorMessage("internal server error")));
+            }
 
             //return a json object for the error
             ctx.result(gson.toJson(new ErrorMessage(e.getMessage())));
@@ -68,13 +71,29 @@ public class UserHandler {
                 ctx.status(400);
                 ctx.result(gson.toJson(new ErrorMessage("bad request")));
             }
+            else {
+                ctx.status(500);
+                ctx.result(gson.toJson(new ErrorMessage("internal server error")));
+            }
         }
     }
 
     public void logout(Context ctx) {
-        //add code here
+        try {
+            String authToken = ctx.header("authorization");
+            userService.logout(authToken);
+            ctx.status(200);
+        } catch (DataAccessException e) {
+            if (e.getMessage().contains("unauthorized")) {
+                ctx.status(401);
+                ctx.result(gson.toJson(new ErrorMessage("unauthorized")));
+            }
+            else {
+                ctx.status(500);
+                ctx.result(gson.toJson(new ErrorMessage("internal server error")));
+            }
+        }
     }
-
     // Helper record for JSON error responses
     private record ErrorMessage(String message) {}
 }
