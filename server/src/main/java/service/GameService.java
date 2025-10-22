@@ -28,7 +28,7 @@ public class GameService {
         return new GameData(gameID, null, null, gameName, null);
     }
 
-    public Collection<GameData> listGames(String authToken) throws DataAccessException{
+    public Collection<GameData> listGames(String authToken) throws DataAccessException {
         var authData = authDAO.getAuth(authToken);
         if (authData == null) throw new DataAccessException("unauthorized");
 
@@ -36,6 +36,28 @@ public class GameService {
     }
 
     public void joinGame(String authToken, int gameID, String playerColor) throws DataAccessException {
-        //add code here
+        //verify authToken
+        var authData = authDAO.getAuth(authToken);
+        if (authData == null) throw new DataAccessException("unauthorized");
+
+        //make sure player has a color
+        if (playerColor == null || playerColor.isBlank()) throw new DataAccessException("bad request");
+
+        //fetch game
+        var game = gameDAO.getGame(gameID);
+        if (game == null) throw new DataAccessException("bad request");
+
+        //check if color is taken, throw "already taken" if color is in use
+        if (playerColor.equalsIgnoreCase("WHITE") && game.whiteUsername() != null) throw new DataAccessException("already taken");
+        if (playerColor.equalsIgnoreCase("BLACK") && game.blackUsername() != null) throw new DataAccessException("already taken");
+
+        if (playerColor.equalsIgnoreCase("WHITE")) {
+            gameDAO.updateGame(gameID, authData.username(), game.blackUsername(), game.gameName(), game.game());
+        }
+        else if (playerColor.equalsIgnoreCase("BLACK")) {
+            gameDAO.updateGame(gameID, game.whiteUsername(), authData.username(), game.gameName(), game.game());
+        }
+        else throw new DataAccessException("bad request");
+
     }
 }
