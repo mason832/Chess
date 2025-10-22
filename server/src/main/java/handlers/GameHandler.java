@@ -77,8 +77,15 @@ public class GameHandler {
             String authToken = ctx.header("Authorization");
             Map request = gson.fromJson(ctx.body(), Map.class);
 
-            int gameID = ((Double) request.get("gameID")).intValue();
-            String playerColor = (String) request.get("playerColor");
+            Object gameIDRequest = request.get("gameID");
+            String playerColor = request.get("playerColor").toString();
+
+            if(gameIDRequest == null) {
+                ctx.status(400);
+                ctx.result(gson.toJson(Map.of("message", "Error: bad request")));
+                return;
+            }
+            int gameID = ((Double)gameIDRequest).intValue();
 
             gameService.joinGame(authToken, gameID, playerColor);
 
