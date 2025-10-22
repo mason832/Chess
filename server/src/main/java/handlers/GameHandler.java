@@ -55,6 +55,27 @@ public class GameHandler {
     }
 
     public void joinGame(Context ctx) {
-        //add code here
+        try {
+            String authToken = ctx.header("Authorization");
+            Map request = gson.fromJson(ctx.body(), Map.class);
+
+            int gameID = ((Double) request.get("gameID")).intValue();
+            String playerColor = (String) request.get("playerColor");
+
+            gameService.joinGame(authToken, gameID, playerColor);
+
+            ctx.status(200);
+            ctx.result("{}");
+        }
+        catch (DataAccessException e) {
+            if (e.getMessage().contains("unauthorized")) ctx.status(401);
+            else if (e.getMessage().contains("bad request")) ctx.status(400);
+            else if (e.getMessage().contains("taken")) ctx.status(403);
+
+            else {
+                ctx.status(500);
+                ctx.result(gson.toJson(Map.of("message", e.getMessage())));
+            }
+        }
     }
 }
