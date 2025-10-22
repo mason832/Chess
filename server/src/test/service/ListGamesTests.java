@@ -1,11 +1,10 @@
-package dataAcessTests;
+package service;
 import dataaccess.*;
 import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import service.GameService;
-import service.UserService;
+
 import java.util.Collection;
 
 

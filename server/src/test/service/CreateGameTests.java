@@ -1,6 +1,4 @@
-package dataAcessTests;
-import service.UserService;
-import service.GameService;
+package service;
 import dataaccess.*;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
