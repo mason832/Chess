@@ -54,15 +54,25 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         var ret = new ArrayList<ChessMove>();
-        if (getPieceType() == PieceType.BISHOP) bishopMove(board, myPosition, ret);
+        if (getPieceType() == PieceType.BISHOP) {
+            bishopMove(board, myPosition, ret);
+        }
 
-        else if (getPieceType() == PieceType.KING) kingMove(board, myPosition, ret);
+        else if (getPieceType() == PieceType.KING) {
+            kingMove(board, myPosition, ret);
+        }
 
-        else if (getPieceType() == PieceType.KNIGHT) knightMove(board, myPosition, ret);
+        else if (getPieceType() == PieceType.KNIGHT) {
+            knightMove(board, myPosition, ret);
+        }
 
-        else if (getPieceType() == PieceType.PAWN) pawnMove(board, myPosition, ret);
+        else if (getPieceType() == PieceType.PAWN) {
+            pawnMove(board, myPosition, ret);
+        }
 
-        else if (getPieceType() == PieceType.ROOK) rookMove(board, myPosition, ret);
+        else if (getPieceType() == PieceType.ROOK) {
+            rookMove(board, myPosition, ret);
+        }
 
         else { //queen
             bishopMove(board, myPosition, ret);
@@ -154,8 +164,8 @@ public class ChessPiece {
 
     private void pawnMove(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
         if (this.pieceColor == ChessGame.TeamColor.WHITE) {
-            ChessPosition diagnal_right = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
-            ChessPosition diagnal_left = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
+            ChessPosition diagonalRight = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
+            ChessPosition diagonalLeft = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
             ChessPosition front = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
 
             //initial move
@@ -168,15 +178,15 @@ public class ChessPiece {
             else if (board.getPiece(front) == null) promotionCheck(board, myPosition, ret, front);
 
             //move diagnal left
-            if (diagnal_left.getColumn() >= 1 && board.getPiece(diagnal_left) != null) promotionCheck(board, myPosition, ret, diagnal_left);
+            if (diagonalLeft.getColumn() >= 1 && board.getPiece(diagonalLeft) != null) promotionCheck(board, myPosition, ret, diagonalLeft);
 
             //move diagnal right
-            if (diagnal_right.getColumn() <= 8 && board.getPiece(diagnal_right) != null) promotionCheck(board, myPosition, ret, diagnal_right);
+            if (diagonalRight.getColumn() <= 8 && board.getPiece(diagonalRight) != null) promotionCheck(board, myPosition, ret, diagonalRight);
         }
 
         if (this.pieceColor == ChessGame.TeamColor.BLACK) {
-            ChessPosition diagnal_right = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 1);
-            ChessPosition diagnal_left = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-1);
+            ChessPosition diagonalRight = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 1);
+            ChessPosition diagonalLeft = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-1);
             ChessPosition front = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
 
             //initial move
@@ -189,10 +199,10 @@ public class ChessPiece {
             else if (board.getPiece(front) == null) promotionCheck(board, myPosition, ret, front);
 
             //move diagnal left
-            if (diagnal_left.getColumn() >= 1 && board.getPiece(diagnal_left) != null) promotionCheck(board, myPosition, ret, diagnal_left);
+            if (diagonalLeft.getColumn() >= 1 && board.getPiece(diagonalLeft) != null) promotionCheck(board, myPosition, ret, diagonalLeft);
 
             //move diagnal right
-            if (diagnal_right.getColumn() <= 8 && board.getPiece(diagnal_right) != null) promotionCheck(board, myPosition, ret, diagnal_right);
+            if (diagonalRight.getColumn() <= 8 && board.getPiece(diagonalRight) != null) promotionCheck(board, myPosition, ret, diagonalRight);
         }
     }
 
