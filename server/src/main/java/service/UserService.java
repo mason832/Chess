@@ -22,7 +22,9 @@ public class UserService {
         {throw new DataAccessException("Error: bad request");}
 
         //make sure username isn't already taken
-        if (userDAO.getUser(user.username())!=null) throw new DataAccessException("Error: already taken");
+        if (userDAO.getUser(user.username())!=null) {
+            throw new DataAccessException("Error: already taken");
+        }
 
         //create user
         userDAO.addUser(user);
@@ -57,7 +59,9 @@ public class UserService {
 
     public void logout(String authToken) throws DataAccessException {
         //checks if there's a provided authToken
-        if (authToken == null || authToken.isEmpty()) throw new DataAccessException("unauthorized");
+        if (authToken == null || authToken.isEmpty()) {
+            throw new DataAccessException("unauthorized");
+        }
 
         //get authData
         AuthData authData = authDAO.getAuth(authToken);
