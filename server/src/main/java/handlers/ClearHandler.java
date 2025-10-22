@@ -15,7 +15,7 @@ public class ClearHandler {
     public void clear(Context ctx) {
         try {
             clearService.clear();
-            ctx.status();
+            ctx.status(200);
         }
         catch (DataAccessException e) {
             ctx.status(500);

@@ -26,9 +26,15 @@ public class GameHandler {
             ctx.result(gson.toJson(Map.of("gameID", game.gameID())));
         }
         catch (DataAccessException e) {
-            if (e.getMessage().contains("unauthorized")) ctx.status(401);
+            if (e.getMessage().contains("unauthorized")) {
+                ctx.status(401);
+                ctx.result(gson.toJson(e.getMessage()));
+            }
 
-            else if (e.getMessage().contains("bad request")) ctx.status(400);
+            else if (e.getMessage().contains("bad request")) {
+                ctx.status(400);
+                ctx.result(gson.toJson(e.getMessage()));
+            }
 
             else {
                 ctx.status(500);
@@ -46,7 +52,10 @@ public class GameHandler {
             ctx.result(gson.toJson(Map.of("games", games)));
         }
         catch (DataAccessException e) {
-            if (e.getMessage().contains("unauthorized")) ctx.status(401);
+            if (e.getMessage().contains("unauthorized")) {
+                ctx.status(401);
+                ctx.result(gson.toJson(e.getMessage()));
+            }
             else {
                 ctx.status(500);
                 ctx.result(gson.toJson(Map.of("message", e.getMessage())));
@@ -68,9 +77,18 @@ public class GameHandler {
             ctx.result("{}");
         }
         catch (DataAccessException e) {
-            if (e.getMessage().contains("unauthorized")) ctx.status(401);
-            else if (e.getMessage().contains("bad request")) ctx.status(400);
-            else if (e.getMessage().contains("taken")) ctx.status(403);
+            if (e.getMessage().contains("unauthorized")) {
+                ctx.status(401);
+                ctx.result(gson.toJson(e.getMessage()));
+            }
+            else if (e.getMessage().contains("bad request")) {
+                ctx.status(400);
+                ctx.result(gson.toJson(e.getMessage()));
+            }
+            else if (e.getMessage().contains("taken")) {
+                ctx.status(403);
+                ctx.result(gson.toJson(e.getMessage()));
+            }
 
             else {
                 ctx.status(500);

@@ -33,9 +33,13 @@ public class UserHandler {
             //check if user already exists
             if (e.getMessage().toLowerCase().contains("taken")) {
                 ctx.status(403);
+                ctx.result(gson.toJson(e.getMessage()));
             }
 
-            else if (e.getMessage().toLowerCase().contains("bad request")) ctx.status(400);
+            else if (e.getMessage().toLowerCase().contains("bad request")) {
+                ctx.status(400);
+                ctx.result(gson.toJson(e.getMessage()));
+            }
 
             //generic failure
             else {
@@ -62,9 +66,15 @@ public class UserHandler {
             ctx.result(gson.toJson(auth));
         }
         catch (DataAccessException e) {
-            if (e.getMessage().contains("unauthorized")) ctx.status(401);
+            if (e.getMessage().contains("unauthorized")) {
+                ctx.status(401);
+                ctx.result(gson.toJson(e.getMessage()));
+            }
 
-            else if (e.getMessage().contains("bad request")) ctx.status(400);
+            else if (e.getMessage().contains("bad request")) {
+                ctx.status(400);
+                ctx.result(gson.toJson(e.getMessage()));
+            }
 
             else {
                 ctx.status(500);
@@ -78,10 +88,11 @@ public class UserHandler {
             String authToken = ctx.header("authorization");
             userService.logout(authToken);
             ctx.status(200);
-        } catch (DataAccessException e) {
+        }
+        catch (DataAccessException e) {
             if (e.getMessage().contains("unauthorized")) {
                 ctx.status(401);
-                ctx.result(gson.toJson(new ErrorMessage("unauthorized")));
+                ctx.result(gson.toJson(e.getMessage()));
             }
             else {
                 ctx.status(500);
