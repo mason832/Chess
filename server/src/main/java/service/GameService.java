@@ -34,4 +34,8 @@ public class GameService {
 
         return gameDAO.listGames();
     }
+
+    public void joinGame(String authToken, int gameID, String playerColor) throws DataAccessException {
+        //add code here
+    }
 }

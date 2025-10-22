@@ -53,4 +53,8 @@ public class GameHandler {
             }
         }
     }
+
+    public void joinGame(Context ctx) {
+        //add code here
+    }
 }
