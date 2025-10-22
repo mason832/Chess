@@ -3,7 +3,7 @@ import dataaccess.*;
 import model.AuthData;
 import model.GameData;
 import java.util.UUID;
-import java.util.List;
+import java.util.Collection;
 
 
 public class GameService {
@@ -28,7 +28,10 @@ public class GameService {
         return new GameData(gameID, null, null, gameName, null);
     }
 
-    public List<GameData> listGames(String authToken) throws DataAccessException{
-        return null;
+    public Collection<GameData> listGames(String authToken) throws DataAccessException{
+        var authData = authDAO.getAuth(authToken);
+        if (authData == null) throw new DataAccessException("unauthorized");
+
+        return gameDAO.listGames();
     }
 }
