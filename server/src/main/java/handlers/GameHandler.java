@@ -28,12 +28,14 @@ public class GameHandler {
         catch (DataAccessException e) {
             if (e.getMessage().contains("unauthorized")) {
                 ctx.status(401);
-                ctx.result(gson.toJson(e.getMessage()));
+                ctx.result(gson.toJson(Map.of("message", "Error: unauthorized")));
+
             }
 
             else if (e.getMessage().contains("bad request")) {
                 ctx.status(400);
-                ctx.result(gson.toJson(e.getMessage()));
+                ctx.result(gson.toJson(Map.of("message", "Error: bad request")));
+
             }
 
             else {
@@ -54,7 +56,7 @@ public class GameHandler {
         catch (DataAccessException e) {
             if (e.getMessage().contains("unauthorized")) {
                 ctx.status(401);
-                ctx.result(gson.toJson(e.getMessage()));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
             else {
                 ctx.status(500);
@@ -79,15 +81,15 @@ public class GameHandler {
         catch (DataAccessException e) {
             if (e.getMessage().contains("unauthorized")) {
                 ctx.status(401);
-                ctx.result(gson.toJson(e.getMessage()));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
             else if (e.getMessage().contains("bad request")) {
                 ctx.status(400);
-                ctx.result(gson.toJson(e.getMessage()));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
             else if (e.getMessage().contains("taken")) {
                 ctx.status(403);
-                ctx.result(gson.toJson(e.getMessage()));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
 
             else {

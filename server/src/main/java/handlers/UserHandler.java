@@ -6,6 +6,7 @@ import dataaccess.DataAccessException;
 import model.UserData;
 import model.AuthData;
 import service.UserService;
+import java.util.Map;
 
 
 public class UserHandler {
@@ -30,26 +31,7 @@ public class UserHandler {
 
         }
         catch (DataAccessException e) {
-            //check if user already exists
-            if (e.getMessage().toLowerCase().contains("taken")) {
-                ctx.status(403);
-                ctx.result(gson.toJson(e.getMessage()));
-            }
-
-            else if (e.getMessage().toLowerCase().contains("bad request")) {
-                ctx.status(400);
-                ctx.result(gson.toJson(e.getMessage()));
-            }
-
-            //generic failure
-            else {
-                ctx.status(500);
-                ctx.result(gson.toJson(new ErrorMessage("internal server error")));
-            }
-
-            //return a json object for the error
-            ctx.result(gson.toJson(new ErrorMessage(e.getMessage())));
-
+            handleErrors(ctx, e);
         }
     }
 
@@ -66,38 +48,41 @@ public class UserHandler {
             ctx.result(gson.toJson(auth));
         }
         catch (DataAccessException e) {
-            if (e.getMessage().contains("unauthorized")) {
-                ctx.status(401);
-                ctx.result(gson.toJson(e.getMessage()));
-            }
-
-            else if (e.getMessage().contains("bad request")) {
-                ctx.status(400);
-                ctx.result(gson.toJson(e.getMessage()));
-            }
-
-            else {
-                ctx.status(500);
-                ctx.result(gson.toJson(new ErrorMessage("internal server error")));
-            }
+            handleErrors(ctx, e);
         }
     }
 
     public void logout(Context ctx) {
         try {
-            String authToken = ctx.header("authorization");
+            String authToken = ctx.header("Authorization");
             userService.logout(authToken);
             ctx.status(200);
+            ctx.result("{}");
         }
+
         catch (DataAccessException e) {
-            if (e.getMessage().contains("unauthorized")) {
-                ctx.status(401);
-                ctx.result(gson.toJson(e.getMessage()));
-            }
-            else {
-                ctx.status(500);
-                ctx.result(gson.toJson(new ErrorMessage("internal server error")));
-            }
+            handleErrors(ctx, e);
+        }
+    }
+
+    private void handleErrors(Context ctx, DataAccessException e) {
+        String message = e.getMessage().toLowerCase();
+
+        if (message.contains("unauthorized")) {
+            ctx.status(401);
+            ctx.result(gson.toJson(Map.of("message", "Error: unauthorized")));
+        }
+        else if (message.contains("bad request")) {
+            ctx.status(400);
+            ctx.result(gson.toJson(Map.of("message", "Error: bad request")));
+        }
+        else if (message.contains("taken")) {
+            ctx.status(403);
+            ctx.result(gson.toJson(Map.of("message", "Error: already taken")));
+        }
+        else {
+            ctx.status(500);
+            ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 

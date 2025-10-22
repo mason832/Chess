@@ -37,10 +37,10 @@ public class GameService {
     public void joinGame(String authToken, int gameID, String playerColor) throws DataAccessException {
         //verify authToken
         var authData = authDAO.getAuth(authToken);
-        if (authData == null) throw new DataAccessException("unauthorized");
+        if (authData == null) throw new DataAccessException("Error: unauthorized");
 
         //make sure player has a color
-        if (playerColor == null || playerColor.isBlank()) throw new DataAccessException("bad request");
+        if (playerColor == null || playerColor.isBlank()) throw new DataAccessException("Error: bad request");
 
         //fetch game
         var game = gameDAO.getGame(gameID);

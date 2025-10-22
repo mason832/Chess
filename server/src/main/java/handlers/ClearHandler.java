@@ -16,7 +16,9 @@ public class ClearHandler {
         try {
             clearService.clear();
             ctx.status(200);
+            ctx.result("{}");
         }
+
         catch (DataAccessException e) {
             ctx.status(500);
             ctx.result("unable to clear database");
