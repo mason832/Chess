@@ -46,7 +46,9 @@ public class UserService {
 
         UserData account = userDAO.getUser(loginAttempt.username());
 
-        if (account == null || !loginAttempt.password().equals(account.password())) throw new DataAccessException("unauthorized");
+        if (account == null || !loginAttempt.password().equals(account.password())) {
+            throw new DataAccessException("unauthorized");
+        }
 
         AuthData authData = new AuthData(account.username(), UUID.randomUUID().toString());
         authDAO.addAuth(authData);
@@ -61,7 +63,9 @@ public class UserService {
         AuthData authData = authDAO.getAuth(authToken);
 
         //check if authToken is valid
-        if (authData == null) throw new DataAccessException("unauthorized");
+        if (authData == null) {
+            throw new DataAccessException("unauthorized");
+        }
 
         //delete autData
         authDAO.deleteAuth(authToken);
