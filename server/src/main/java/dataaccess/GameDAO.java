@@ -4,11 +4,11 @@ import java.util.Collection;
 
 public interface GameDAO {
 
-    int createGame(String GameName);
+    int createGame(String gameName);
 
     int gameCount();
 
-    GameData getGame(int GameID);
+    GameData getGame(int gameID);
 
     void updateGame(int gameID, String whiteUsername, String blackUsername, String gameName, Object game) throws DataAccessException;
 

@@ -36,17 +36,17 @@ public class UserService {
         return authData;
     }
 
-    public AuthData login(UserData login_attempt) throws DataAccessException {
+    public AuthData login(UserData loginAttempt) throws DataAccessException {
 
         //make sure username and password work
-        if (login_attempt.username() == null || login_attempt.username().isEmpty() ||
-                login_attempt.password() == null || login_attempt.password().isEmpty()) {
+        if (loginAttempt.username() == null || loginAttempt.username().isEmpty() ||
+                loginAttempt.password() == null || loginAttempt.password().isEmpty()) {
             throw new DataAccessException("bad request");
         }
 
-        UserData account = userDAO.getUser(login_attempt.username());
+        UserData account = userDAO.getUser(loginAttempt.username());
 
-        if (account == null || !login_attempt.password().equals(account.password())) throw new DataAccessException("unauthorized");
+        if (account == null || !loginAttempt.password().equals(account.password())) throw new DataAccessException("unauthorized");
 
         AuthData authData = new AuthData(account.username(), UUID.randomUUID().toString());
         authDAO.addAuth(authData);
