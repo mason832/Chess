@@ -17,7 +17,14 @@ public class GameHandler {
         try {
             Map request = gson.fromJson(ctx.body(), Map.class);
 
-            String gameName = request.get("gameName").toString();
+            Object nameRequest = request.get("gameName");
+            if (nameRequest == null || nameRequest.toString().isEmpty()) {
+                ctx.status(400);
+                ctx.result(gson.toJson(Map.of("message", "Error: bad request")));
+                return;
+            }
+
+            String gameName = nameRequest.toString();
             String authToken = ctx.header("Authorization");
 
             var game = gameService.createGame(authToken, gameName);
@@ -83,15 +90,17 @@ public class GameHandler {
                 ctx.status(401);
                 ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
-            else if (e.getMessage().contains("bad request")) {
+            else if (e.getMessage().toLowerCase().contains("bad request")
+                    || e.getMessage().toLowerCase().contains("invalid")
+                    || e.getMessage().toLowerCase().contains("not found")) {
                 ctx.status(400);
-                ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+                ctx.result(gson.toJson(Map.of("message", "Error: bad request")));
             }
+
             else if (e.getMessage().contains("taken")) {
                 ctx.status(403);
                 ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
-
             else {
                 ctx.status(500);
                 ctx.result(gson.toJson(Map.of("message", e.getMessage())));
