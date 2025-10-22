@@ -87,8 +87,9 @@ public class ChessPiece {
         if (r <= 8 && r >= 1 && c <= 8 && c >= 1) {
 
             if (board.getPiece(new ChessPosition(r, c)) != null) {
-                if (board.getPiece(new ChessPosition(r, c)).pieceColor != this.pieceColor)
+                if (board.getPiece(new ChessPosition(r, c)).pieceColor != this.pieceColor) {
                     ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
+                }
                 return true;
             }
             ret.add(new ChessMove(myPosition, new ChessPosition(r, c), null));
@@ -105,29 +106,39 @@ public class ChessPiece {
                 ret.add(new ChessMove(myPosition, move, PieceType.BISHOP));
                 ret.add(new ChessMove(myPosition, move, PieceType.QUEEN));
             }
-            else ret.add(new ChessMove(myPosition, move, null));
+            else {
+                ret.add(new ChessMove(myPosition, move, null));
+            }
         }
     }
 
     private void bishopMove(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
         int c = myPosition.getColumn();
         for (int r = myPosition.getRow() + 1; r != 9; r++) {
-            if (++c > 8 || tileCheck(board, myPosition, ret, r, c)) break;
+            if (++c > 8 || tileCheck(board, myPosition, ret, r, c)) {
+                break;
+            }
         }
 
         c = myPosition.getColumn();
         for (int r = myPosition.getRow() + 1; r != 9; r++) {
-            if (--c == 0|| tileCheck(board, myPosition, ret, r, c)) break;
+            if (--c == 0|| tileCheck(board, myPosition, ret, r, c)) {
+                break;
+            }
         }
 
         c = myPosition.getColumn();
         for (int r = myPosition.getRow() - 1; r != 0; r--) {
-            if (++c > 8|| tileCheck(board, myPosition, ret, r, c)) break;
+            if (++c > 8|| tileCheck(board, myPosition, ret, r, c)) {
+                break;
+            }
         }
 
         c = myPosition.getColumn();
         for (int r = myPosition.getRow() - 1; r != 0; r--) {
-            if (--c == 0|| tileCheck(board, myPosition, ret, r, c)) break;
+            if (--c == 0|| tileCheck(board, myPosition, ret, r, c)) {
+                break;
+            }
         }
     }
 
@@ -175,13 +186,19 @@ public class ChessPiece {
             }
 
             //move forward
-            else if (board.getPiece(front) == null) promotionCheck(board, myPosition, ret, front);
+            else if (board.getPiece(front) == null) {
+                promotionCheck(board, myPosition, ret, front);
+            }
 
             //move diagnal left
-            if (diagonalLeft.getColumn() >= 1 && board.getPiece(diagonalLeft) != null) promotionCheck(board, myPosition, ret, diagonalLeft);
+            if (diagonalLeft.getColumn() >= 1 && board.getPiece(diagonalLeft) != null) {
+                promotionCheck(board, myPosition, ret, diagonalLeft);
+            }
 
             //move diagnal right
-            if (diagonalRight.getColumn() <= 8 && board.getPiece(diagonalRight) != null) promotionCheck(board, myPosition, ret, diagonalRight);
+            if (diagonalRight.getColumn() <= 8 && board.getPiece(diagonalRight) != null) {
+                promotionCheck(board, myPosition, ret, diagonalRight);
+            }
         }
 
         if (this.pieceColor == ChessGame.TeamColor.BLACK) {
@@ -196,31 +213,45 @@ public class ChessPiece {
             }
 
             //move forward
-            else if (board.getPiece(front) == null) promotionCheck(board, myPosition, ret, front);
+            else if (board.getPiece(front) == null) {
+                promotionCheck(board, myPosition, ret, front);
+            }
 
             //move diagnal left
-            if (diagonalLeft.getColumn() >= 1 && board.getPiece(diagonalLeft) != null) promotionCheck(board, myPosition, ret, diagonalLeft);
+            if (diagonalLeft.getColumn() >= 1 && board.getPiece(diagonalLeft) != null) {
+                promotionCheck(board, myPosition, ret, diagonalLeft);
+            }
 
             //move diagnal right
-            if (diagonalRight.getColumn() <= 8 && board.getPiece(diagonalRight) != null) promotionCheck(board, myPosition, ret, diagonalRight);
+            if (diagonalRight.getColumn() <= 8 && board.getPiece(diagonalRight) != null) {
+                promotionCheck(board, myPosition, ret, diagonalRight);
+            }
         }
     }
 
     private void rookMove(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
         for (int r = myPosition.getRow()-1; r != 0; r--) {
-            if (tileCheck(board, myPosition, ret, r, myPosition.getColumn())) break;
+            if (tileCheck(board, myPosition, ret, r, myPosition.getColumn())) {
+                break;
+            }
         }
 
         for (int r = myPosition.getRow()+1; r != 9; r++) {
-            if (tileCheck(board, myPosition, ret, r, myPosition.getColumn())) break;
+            if (tileCheck(board, myPosition, ret, r, myPosition.getColumn())) {
+                break;
+            }
         }
 
         for (int c = myPosition.getColumn()-1; c != 0; c--) {
-            if (tileCheck(board, myPosition, ret, myPosition.getRow(), c)) break;
+            if (tileCheck(board, myPosition, ret, myPosition.getRow(), c)) {
+                break;
+            }
         }
 
         for (int c = myPosition.getColumn()+1; c != 9; c++) {
-            if (tileCheck(board, myPosition, ret, myPosition.getRow(), c)) break;
+            if (tileCheck(board, myPosition, ret, myPosition.getRow(), c)) {
+                break;
+            }
         }
     }
 
