@@ -77,36 +77,49 @@ public class GameHandler {
             String authToken = ctx.header("Authorization");
             Map request = gson.fromJson(ctx.body(), Map.class);
 
-            Object gameIDRequest = request.get("gameID");
-            String playerColor = request.get("playerColor").toString();
+            // --- Validate input before using ---
+            Object idObj = request.get("gameID");
+            Object colorObj = request.get("playerColor");
 
-            if(gameIDRequest == null) {
+            if (idObj == null) {
                 ctx.status(400);
                 ctx.result(gson.toJson(Map.of("message", "Error: bad request")));
                 return;
             }
-            int gameID = ((Double)gameIDRequest).intValue();
 
+            int gameID;
+            try {
+                gameID = ((Double) idObj).intValue();
+            } catch (Exception e) {
+                ctx.status(400);
+                ctx.result(gson.toJson(Map.of("message", "Error: bad request")));
+                return;
+            }
+
+            String playerColor = colorObj == null ? null : colorObj.toString();
+
+            // --- Call service ---
             gameService.joinGame(authToken, gameID, playerColor);
 
             ctx.status(200);
             ctx.result("{}");
         }
         catch (DataAccessException e) {
-            if (e.getMessage().contains("unauthorized")) {
+            String message = e.getMessage().toLowerCase();
+
+            if (message.contains("unauthorized")) {
                 ctx.status(401);
-                ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+                ctx.result(gson.toJson(Map.of("message", "Error: unauthorized")));
             }
-            else if (e.getMessage().toLowerCase().contains("bad request")
-                    || e.getMessage().toLowerCase().contains("invalid")
-                    || e.getMessage().toLowerCase().contains("not found")) {
+            else if (message.contains("bad request") ||
+                    message.contains("invalid") ||
+                    message.contains("not found")) {
                 ctx.status(400);
                 ctx.result(gson.toJson(Map.of("message", "Error: bad request")));
             }
-
-            else if (e.getMessage().contains("taken")) {
+            else if (message.contains("taken")) {
                 ctx.status(403);
-                ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+                ctx.result(gson.toJson(Map.of("message", "Error: already taken")));
             }
             else {
                 ctx.status(500);
@@ -114,4 +127,5 @@ public class GameHandler {
             }
         }
     }
+
 }

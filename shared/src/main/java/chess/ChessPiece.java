@@ -54,26 +54,26 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         var ret = new ArrayList<ChessMove>();
-        if (getPieceType() == PieceType.BISHOP) bishop_move(board, myPosition, ret);
+        if (getPieceType() == PieceType.BISHOP) bishopMove(board, myPosition, ret);
 
-        else if (getPieceType() == PieceType.KING) king_move(board, myPosition, ret);
+        else if (getPieceType() == PieceType.KING) kingMove(board, myPosition, ret);
 
-        else if (getPieceType() == PieceType.KNIGHT) knight_move(board, myPosition, ret);
+        else if (getPieceType() == PieceType.KNIGHT) knightMove(board, myPosition, ret);
 
         else if (getPieceType() == PieceType.PAWN) pawn_move(board, myPosition, ret);
 
-        else if (getPieceType() == PieceType.ROOK) rook_move(board, myPosition, ret);
+        else if (getPieceType() == PieceType.ROOK) rookMove(board, myPosition, ret);
 
         else { //queen
-            bishop_move(board, myPosition, ret);
-            rook_move(board, myPosition, ret);
+            bishopMove(board, myPosition, ret);
+            rookMove(board, myPosition, ret);
         }
 
         return ret;
     }
 
     //checks if there is a piece present
-    private boolean tile_check(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret, int r, int c) {
+    private boolean tileCheck(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret, int r, int c) {
         if (r <= 8 && r >= 1 && c <= 8 && c >= 1) {
 
             if (board.getPiece(new ChessPosition(r, c)) != null) {
@@ -87,7 +87,7 @@ public class ChessPiece {
         return false;
     }
 
-    private void promotion_check(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret, ChessPosition move) {
+    private void promotionCheck(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret, ChessPosition move) {
         if (board.getPiece(move) == null || board.getPiece(move).pieceColor != this.pieceColor) {
             if (move.getRow() == 8 || move.getRow() == 1) {
                 ret.add(new ChessMove(myPosition, move, PieceType.ROOK));
@@ -99,57 +99,57 @@ public class ChessPiece {
         }
     }
 
-    private void bishop_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+    private void bishopMove(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
         int c = myPosition.getColumn();
         for (int r = myPosition.getRow() + 1; r != 9; r++) {
-            if (++c > 8 || tile_check(board, myPosition, ret, r, c)) break;
+            if (++c > 8 || tileCheck(board, myPosition, ret, r, c)) break;
         }
 
         c = myPosition.getColumn();
         for (int r = myPosition.getRow() + 1; r != 9; r++) {
-            if (--c == 0|| tile_check(board, myPosition, ret, r, c)) break;
+            if (--c == 0|| tileCheck(board, myPosition, ret, r, c)) break;
         }
 
         c = myPosition.getColumn();
         for (int r = myPosition.getRow() - 1; r != 0; r--) {
-            if (++c > 8|| tile_check(board, myPosition, ret, r, c)) break;
+            if (++c > 8|| tileCheck(board, myPosition, ret, r, c)) break;
         }
 
         c = myPosition.getColumn();
         for (int r = myPosition.getRow() - 1; r != 0; r--) {
-            if (--c == 0|| tile_check(board, myPosition, ret, r, c)) break;
+            if (--c == 0|| tileCheck(board, myPosition, ret, r, c)) break;
         }
     }
 
-    private void king_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+    private void kingMove(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
 
         //check top
-        tile_check(board, myPosition, ret, myPosition.getRow() + 1, myPosition.getColumn() - 1);
-        tile_check(board, myPosition, ret, myPosition.getRow() + 1, myPosition.getColumn());
-        tile_check(board, myPosition, ret, myPosition.getRow() + 1, myPosition.getColumn() + 1);
+        tileCheck(board, myPosition, ret, myPosition.getRow() + 1, myPosition.getColumn() - 1);
+        tileCheck(board, myPosition, ret, myPosition.getRow() + 1, myPosition.getColumn());
+        tileCheck(board, myPosition, ret, myPosition.getRow() + 1, myPosition.getColumn() + 1);
 
 
         //check sides
-        tile_check(board, myPosition, ret, myPosition.getRow(), myPosition.getColumn()+1);
-        tile_check(board, myPosition, ret, myPosition.getRow(), myPosition.getColumn()-1);
+        tileCheck(board, myPosition, ret, myPosition.getRow(), myPosition.getColumn()+1);
+        tileCheck(board, myPosition, ret, myPosition.getRow(), myPosition.getColumn()-1);
 
         //check below
-        tile_check(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()+1);
-        tile_check(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn());
-        tile_check(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()-1);
+        tileCheck(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()+1);
+        tileCheck(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn());
+        tileCheck(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()-1);
 
     }
 
-    private void knight_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
-        tile_check(board, myPosition, ret, myPosition.getRow()+2, myPosition.getColumn()+1);
-        tile_check(board, myPosition, ret, myPosition.getRow()+2, myPosition.getColumn()-1);
-        tile_check(board, myPosition, ret, myPosition.getRow()-2, myPosition.getColumn()+1);
-        tile_check(board, myPosition, ret, myPosition.getRow()-2, myPosition.getColumn()-1);
+    private void knightMove(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+        tileCheck(board, myPosition, ret, myPosition.getRow()+2, myPosition.getColumn()+1);
+        tileCheck(board, myPosition, ret, myPosition.getRow()+2, myPosition.getColumn()-1);
+        tileCheck(board, myPosition, ret, myPosition.getRow()-2, myPosition.getColumn()+1);
+        tileCheck(board, myPosition, ret, myPosition.getRow()-2, myPosition.getColumn()-1);
 
-        tile_check(board, myPosition, ret, myPosition.getRow()+1, myPosition.getColumn()+2);
-        tile_check(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()+2);
-        tile_check(board, myPosition, ret, myPosition.getRow()+1, myPosition.getColumn()-2);
-        tile_check(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()-2);
+        tileCheck(board, myPosition, ret, myPosition.getRow()+1, myPosition.getColumn()+2);
+        tileCheck(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()+2);
+        tileCheck(board, myPosition, ret, myPosition.getRow()+1, myPosition.getColumn()-2);
+        tileCheck(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()-2);
     }
 
     private void pawn_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
@@ -165,13 +165,13 @@ public class ChessPiece {
             }
 
             //move forward
-            else if (board.getPiece(front) == null) promotion_check(board, myPosition, ret, front);
+            else if (board.getPiece(front) == null) promotionCheck(board, myPosition, ret, front);
 
             //move diagnal left
-            if (diagnal_left.getColumn() >= 1 && board.getPiece(diagnal_left) != null) promotion_check(board, myPosition, ret, diagnal_left);
+            if (diagnal_left.getColumn() >= 1 && board.getPiece(diagnal_left) != null) promotionCheck(board, myPosition, ret, diagnal_left);
 
             //move diagnal right
-            if (diagnal_right.getColumn() <= 8 && board.getPiece(diagnal_right) != null) promotion_check(board, myPosition, ret, diagnal_right);
+            if (diagnal_right.getColumn() <= 8 && board.getPiece(diagnal_right) != null) promotionCheck(board, myPosition, ret, diagnal_right);
         }
 
         if (this.pieceColor == ChessGame.TeamColor.BLACK) {
@@ -186,31 +186,31 @@ public class ChessPiece {
             }
 
             //move forward
-            else if (board.getPiece(front) == null) promotion_check(board, myPosition, ret, front);
+            else if (board.getPiece(front) == null) promotionCheck(board, myPosition, ret, front);
 
             //move diagnal left
-            if (diagnal_left.getColumn() >= 1 && board.getPiece(diagnal_left) != null) promotion_check(board, myPosition, ret, diagnal_left);
+            if (diagnal_left.getColumn() >= 1 && board.getPiece(diagnal_left) != null) promotionCheck(board, myPosition, ret, diagnal_left);
 
             //move diagnal right
-            if (diagnal_right.getColumn() <= 8 && board.getPiece(diagnal_right) != null) promotion_check(board, myPosition, ret, diagnal_right);
+            if (diagnal_right.getColumn() <= 8 && board.getPiece(diagnal_right) != null) promotionCheck(board, myPosition, ret, diagnal_right);
         }
     }
 
-    private void rook_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+    private void rookMove(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
         for (int r = myPosition.getRow()-1; r != 0; r--) {
-            if (tile_check(board, myPosition, ret, r, myPosition.getColumn())) break;
+            if (tileCheck(board, myPosition, ret, r, myPosition.getColumn())) break;
         }
 
         for (int r = myPosition.getRow()+1; r != 9; r++) {
-            if (tile_check(board, myPosition, ret, r, myPosition.getColumn())) break;
+            if (tileCheck(board, myPosition, ret, r, myPosition.getColumn())) break;
         }
 
         for (int c = myPosition.getColumn()-1; c != 0; c--) {
-            if (tile_check(board, myPosition, ret, myPosition.getRow(), c)) break;
+            if (tileCheck(board, myPosition, ret, myPosition.getRow(), c)) break;
         }
 
         for (int c = myPosition.getColumn()+1; c != 9; c++) {
-            if (tile_check(board, myPosition, ret, myPosition.getRow(), c)) break;
+            if (tileCheck(board, myPosition, ret, myPosition.getRow(), c)) break;
         }
     }
 
