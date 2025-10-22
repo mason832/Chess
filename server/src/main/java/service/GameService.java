@@ -3,6 +3,7 @@ import dataaccess.*;
 import model.AuthData;
 import model.GameData;
 import java.util.UUID;
+import java.util.List;
 
 
 public class GameService {
@@ -25,5 +26,9 @@ public class GameService {
         int gameID = gameDAO.createGame(gameName);
 
         return new GameData(gameID, null, null, gameName, null);
+    }
+
+    public List<GameData> listGames(String authToken) throws DataAccessException{
+        return null;
     }
 }

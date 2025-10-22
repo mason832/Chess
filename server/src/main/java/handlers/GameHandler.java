@@ -36,4 +36,21 @@ public class GameHandler {
             }
         }
     }
+
+    public void listGames(Context ctx) {
+        try {
+            String authToken = ctx.header ("Authorization");
+            var games = gameService.listGames(authToken);
+
+            ctx.status(200);
+            ctx.result(gson.toJson(Map.of("games", games)));
+        }
+        catch (DataAccessException e) {
+            if (e.getMessage().contains("unauthorized")) ctx.status(401);
+            else {
+                ctx.status(500);
+                ctx.result(gson.toJson(Map.of("message", e.getMessage())));
+            }
+        }
+    }
 }

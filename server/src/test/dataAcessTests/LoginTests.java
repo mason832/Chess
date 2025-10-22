@@ -9,11 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginTests {
     private UserService userService;
+    private UserDAO userDAO;
+    private AuthDAO authDAO;
 
     @BeforeEach
     public void setup() {
-        UserDAO userDAO = new MemoryUserDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
+        userDAO = new MemoryUserDAO();
+        authDAO = new MemoryAuthDAO();
         userService = new UserService(userDAO, authDAO);
     }
 
@@ -28,7 +30,8 @@ public class LoginTests {
         //check that the authToken exists
         assertNotNull(authData);
         assertNotNull(authData.authToken());
-        assertEquals("bob", authData.username());
+        assertNotNull(userDAO.getUser("bob"));
+        assertEquals("bob", authDAO.getAuth(authData.authToken()).username());
     }
 
     @Test
