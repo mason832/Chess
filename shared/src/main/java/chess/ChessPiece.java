@@ -60,7 +60,7 @@ public class ChessPiece {
 
         else if (getPieceType() == PieceType.KNIGHT) knightMove(board, myPosition, ret);
 
-        else if (getPieceType() == PieceType.PAWN) pawn_move(board, myPosition, ret);
+        else if (getPieceType() == PieceType.PAWN) pawnMove(board, myPosition, ret);
 
         else if (getPieceType() == PieceType.ROOK) rookMove(board, myPosition, ret);
 
@@ -152,7 +152,7 @@ public class ChessPiece {
         tileCheck(board, myPosition, ret, myPosition.getRow()-1, myPosition.getColumn()-2);
     }
 
-    private void pawn_move(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
+    private void pawnMove(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> ret) {
         if (this.pieceColor == ChessGame.TeamColor.WHITE) {
             ChessPosition diagnal_right = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
             ChessPosition diagnal_left = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);

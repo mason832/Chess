@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class ChessBoard {
 
-    ChessPiece[][] chess_piece = new ChessPiece[8][8];
+    ChessPiece[][] boardPiece = new ChessPiece[8][8];
     public ChessBoard() {
 
     }
@@ -22,7 +22,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        chess_piece[position.getRow()-1][position.getColumn()-1] = piece;
+        boardPiece[position.getRow()-1][position.getColumn()-1] = piece;
         }
 
     /**
@@ -33,7 +33,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return chess_piece[position.getRow()-1][position.getColumn()-1];
+        return boardPiece[position.getRow()-1][position.getColumn()-1];
     }
 
     /**
@@ -77,11 +77,11 @@ public class ChessBoard {
             return false;
         }
         ChessBoard that = (ChessBoard) o;
-        return Objects.deepEquals(chess_piece, that.chess_piece);
+        return Objects.deepEquals(boardPiece, that.boardPiece);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(chess_piece);
+        return Arrays.deepHashCode(boardPiece);
     }
 }
