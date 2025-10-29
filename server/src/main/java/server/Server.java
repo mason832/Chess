@@ -18,9 +18,15 @@ public class Server {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
         //create data access objects
-        MemoryUserDAO userDAO = new MemoryUserDAO();
-        MemoryAuthDAO authDAO = new MemoryAuthDAO();
-        MemoryGameDAO gameDAO = new MemoryGameDAO();
+        UserDAO userDAO;
+        AuthDAO authDAO;
+        GameDAO gameDAO;
+
+        try {userDAO = new SQLUserDAO();}
+        catch (Exception e) {userDAO = new MemoryUserDAO();}
+
+        authDAO = new MemoryAuthDAO();
+        gameDAO = new MemoryGameDAO();
 
         //create service object
         UserService userService = new UserService(userDAO, authDAO);
