@@ -25,7 +25,9 @@ public class Server {
         try {userDAO = new SQLUserDAO();}
         catch (Exception e) {userDAO = new MemoryUserDAO();}
 
-        authDAO = new MemoryAuthDAO();
+        try {authDAO = new SQLAuthDAO();}
+        catch (Exception e) {authDAO = new MemoryAuthDAO();}
+
         gameDAO = new MemoryGameDAO();
 
         //create service object
