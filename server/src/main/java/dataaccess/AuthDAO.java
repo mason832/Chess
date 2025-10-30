@@ -6,7 +6,7 @@ public interface AuthDAO {
 
     int tokenCount();
 
-    AuthData getAuth(String authToken);
+    AuthData getAuth(String authToken) throws Exception;
 
     void deleteAuth (String authToken);
 

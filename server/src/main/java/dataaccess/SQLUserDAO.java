@@ -46,10 +46,9 @@ public class SQLUserDAO implements UserDAO{
                 preparedStatement.setString(1, username);
                 var rs = preparedStatement.executeQuery();
                 if (rs.next()) {
-                    String userName = rs.getString("username");
                     String password = rs.getString("password");
                     String email = rs.getString("email");
-                    return new UserData(userName, password, email);
+                    return new UserData(username, password, email);
                 }
             }
         }
