@@ -5,6 +5,7 @@ import java.sql.Connection;
 
 public class SQLUserDAO implements UserDAO{
 
+    private int userCount=0;
     private final String createUserStatement = """
             CREATE TABLE IF NOT EXISTS user (
             'username' varchar(20),
@@ -24,7 +25,7 @@ public class SQLUserDAO implements UserDAO{
 
     @Override
     public int userCount() throws Exception {
-        return 0;
+        return userCount;
     }
 
     @Override
@@ -37,6 +38,7 @@ public class SQLUserDAO implements UserDAO{
                 preparedStatement.executeUpdate();
             }
         }
+        userCount++;
     }
 
     @Override
@@ -58,5 +60,6 @@ public class SQLUserDAO implements UserDAO{
     @Override
     public void clear() throws DataAccessException {
 
+        userCount=0;
     }
 }
