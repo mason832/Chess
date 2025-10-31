@@ -8,14 +8,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginTests {
     private UserService userService;
+    private ClearService clearService;
     private UserDAO userDAO;
     private AuthDAO authDAO;
 
     @BeforeEach
-    public void setup() {
-        userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
+    public void setup() throws Exception {
+        userDAO = new SQLUserDAO();
+        authDAO = new SQLAuthDAO();
         userService = new UserService(userDAO, authDAO);
+        userDAO.clear();
     }
 
     @Test

@@ -41,11 +41,9 @@ public class SQLAuthDAO implements AuthDAO{
         try (var conn = DatabaseManager.getConnection();
              var ps = conn.prepareStatement(statement);
              var rs = ps.executeQuery()) {
-            if (rs.next()) {return rs.getInt("count");
-            }
-        }catch (SQLException e) {
-            throw new DataAccessException(e.getMessage());
+            if (rs.next()) {return rs.getInt("count");}
         }
+        catch (SQLException e) {throw new DataAccessException(e.getMessage());}
         return 0;
     }
 

@@ -49,9 +49,10 @@ public class UserService {
 
         UserData account = userDAO.getUser(loginAttempt.username());
 
-        if (account == null || !BCrypt.checkpw(loginAttempt.password(), account.password())) {
-            throw new DataAccessException("unauthorized");
-        }
+        try {if (account == null || !BCrypt.checkpw(loginAttempt.password(), account.password())) {
+                throw new DataAccessException("unauthorized");
+            }
+        } catch (Exception e) { throw new DataAccessException("unauthorized");}
 
         AuthData authData = new AuthData(account.username(), UUID.randomUUID().toString());
         authDAO.addAuth(authData);

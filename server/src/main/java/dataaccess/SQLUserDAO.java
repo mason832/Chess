@@ -46,10 +46,7 @@ public class SQLUserDAO implements UserDAO{
                 preparedStatement.setString(3, u.email());
                 preparedStatement.executeUpdate();
             }
-        }
-        catch (SQLException e) {
-            throw new DataAccessException(e.getMessage());
-        }
+        } catch (SQLException e) {throw new DataAccessException(e.getMessage());}
     }
 
     @Override

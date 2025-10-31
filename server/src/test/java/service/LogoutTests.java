@@ -19,22 +19,20 @@ public class LogoutTests {
 
     @Test
     void logoutSuccess() throws Exception {
-        userService.register(new UserData("bob", "1234", "bob@email.com"));
-        var loginAuthData = userService.login(new UserData("bob", "1234", null));
-        assertEquals(2, authDAO.tokenCount());
+        var loginAuthData = userService.register(new UserData("bob", "1234", "bob@email.com"));
+        assertEquals(1, authDAO.tokenCount());
 
         userService.logout(loginAuthData.authToken());
-        assertEquals(1, authDAO.tokenCount());
+        assertEquals(0, authDAO.tokenCount());
         assertNull(authDAO.getAuth(loginAuthData.authToken()));
     }
 
     @Test
     void logoutFail() throws Exception{
-        var registerAuthData = userService.register(new UserData("bob", "1234", "bob@email.com"));
-        userService.login(new UserData("bob", "1234", null));
+        userService.register(new UserData("bob", "1234", "bob@email.com"));
+        var exception = assertThrows(DataAccessException.class, () -> userService.logout("fakeAuthToken"));
 
-        var exception = assertThrows(DataAccessException.class, () -> userService.logout("1"));
         assertTrue(exception.getMessage().contains("unauthorized"));
-        assertEquals(2, authDAO.tokenCount());
+        assertEquals(1, authDAO.tokenCount());
     }
 }
