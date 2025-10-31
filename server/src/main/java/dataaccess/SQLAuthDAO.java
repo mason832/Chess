@@ -1,7 +1,6 @@
 package dataaccess;
 
 import model.AuthData;
-import model.UserData;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -47,7 +46,7 @@ public class SQLAuthDAO implements AuthDAO{
     public AuthData getAuth(String authToken) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT username, authToken FROM authData WHERE authToken=?")) {
-                preparedStatement.setString(2, authToken);
+                preparedStatement.setString(1, authToken);
                 var rs = preparedStatement.executeQuery();
                 if(rs.next()) {
                     String username = rs.getString("username");
@@ -61,8 +60,17 @@ public class SQLAuthDAO implements AuthDAO{
     }
 
     @Override
-    public void deleteAuth(String authToken) {
-        //add code here
+    public void deleteAuth(String authToken) throws DataAccessException{
+        String sqlStatement = "DELETE FROM authData WHERE WHERE authToken=?";
+
+        try (var conn=DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(sqlStatement)) {
+                preparedStatement.setString(1, authToken);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
