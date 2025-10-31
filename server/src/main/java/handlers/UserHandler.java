@@ -85,7 +85,4 @@ public class UserHandler {
             ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
-
-    // Helper record for JSON error responses
-    private record ErrorMessage(String message) {}
 }
