@@ -20,13 +20,16 @@ public class Server {
         //create data access objects
         UserDAO userDAO;
         AuthDAO authDAO;
-        GameDAO gameDAO = new MemoryGameDAO();
+        GameDAO gameDAO;
 
         try {authDAO = new SQLAuthDAO();}
         catch (Exception e) {authDAO = new MemoryAuthDAO();}
 
         try {userDAO = new SQLUserDAO();}
         catch (Exception e) {userDAO = new MemoryUserDAO();}
+
+        try {gameDAO = new SQLGameDAO();}
+        catch (Exception e) {gameDAO = new MemoryGameDAO();}
 
 
         //create service object
