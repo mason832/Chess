@@ -1,7 +1,5 @@
 package dataaccess;
-
 import model.AuthData;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -38,7 +36,16 @@ public class SQLAuthDAO implements AuthDAO{
     }
 
     @Override
-    public int tokenCount() {
+    public int tokenCount() throws DataAccessException{
+        var statement = "SELECT COUNT(*) AS count FROM authData";
+        try (var conn = DatabaseManager.getConnection();
+             var ps = conn.prepareStatement(statement);
+             var rs = ps.executeQuery()) {
+            if (rs.next()) {return rs.getInt("count");
+            }
+        }catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
         return 0;
     }
 
@@ -61,7 +68,7 @@ public class SQLAuthDAO implements AuthDAO{
 
     @Override
     public void deleteAuth(String authToken) throws DataAccessException{
-        String sqlStatement = "DELETE FROM authData WHERE WHERE authToken=?";
+        String sqlStatement = "DELETE FROM authData WHERE authToken=?";
 
         try (var conn=DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(sqlStatement)) {
@@ -75,6 +82,11 @@ public class SQLAuthDAO implements AuthDAO{
 
     @Override
     public void clear() throws DataAccessException {
-        //add code here
+        String statement = "DELETE FROM authData";
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(statement))
+            {preparedStatement.executeUpdate();}
+        }
+        catch (SQLException e) {throw new DataAccessException(e.getMessage());}
     }
 }

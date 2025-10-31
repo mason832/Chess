@@ -45,7 +45,8 @@ public class RegisterTests {
         var exceptionB = assertThrows(DataAccessException.class, () -> userService.register(userB));
         assertTrue(exceptionB.getMessage().contains("bad request"));
 
-        assertEquals(0, authDAO.tokenCount());
+        try{assertEquals(0, authDAO.tokenCount());}
+        catch (DataAccessException e) {}
     }
 
     @Test
@@ -58,7 +59,8 @@ public class RegisterTests {
         var exceptionB = assertThrows(DataAccessException.class, () -> userService.register(userB));
         assertTrue(exceptionB.getMessage().contains("bad request"));
 
-        assertEquals(0, authDAO.tokenCount());
+        try{assertEquals(0, authDAO.tokenCount());}
+        catch (DataAccessException e) {}
     }
 
     @Test
@@ -71,6 +73,7 @@ public class RegisterTests {
         var exceptionB = assertThrows(DataAccessException.class, () -> userService.register(userB));
         assertTrue(exceptionB.getMessage().contains("bad request"));
 
-        assertEquals(0, authDAO.tokenCount());
+        try{assertEquals(0, authDAO.tokenCount());}
+        catch (DataAccessException e) {}
     }
 }

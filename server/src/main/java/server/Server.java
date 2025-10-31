@@ -23,7 +23,7 @@ public class Server {
         GameDAO gameDAO = new MemoryGameDAO();
 
         try {authDAO = new SQLAuthDAO();}
-        catch (Exception e) {authDAO =  new MemoryAuthDAO();}
+        catch (Exception e) {authDAO = new MemoryAuthDAO();}
 
         try {userDAO = new SQLUserDAO();}
         catch (Exception e) {userDAO = new MemoryUserDAO();}
