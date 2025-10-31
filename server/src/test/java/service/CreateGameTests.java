@@ -14,12 +14,15 @@ public class CreateGameTests {
     UserDAO userDAO;
 
     @BeforeEach
-    public void setup() {
-        userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
-        gameDAO = new MemoryGameDAO();
+    public void setup() throws Exception {
+        userDAO = new SQLUserDAO();
+        authDAO = new SQLAuthDAO();
+        gameDAO = new SQLGameDAO();
         userService = new UserService(userDAO, authDAO);
         gameService = new GameService(gameDAO, authDAO);
+        userDAO.clear();
+        authDAO.clear();
+        gameDAO.clear();
     }
 
     @Test

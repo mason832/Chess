@@ -4,18 +4,30 @@ import dataaccess.DataAccessException;
 import dataaccess.*;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RegisterTests {
     private UserService userService;
+    private GameService gameService;
+    private ClearService clearService;
     AuthDAO authDAO;
+    GameDAO gameDAO;
+    UserDAO userDAO;
 
     @BeforeEach
-    public void setup() {
-        UserDAO userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
+    public void setup() throws Exception {
+        userDAO = new SQLUserDAO();
+        authDAO = new SQLAuthDAO();
+        gameDAO = new SQLGameDAO();
+        clearService = new ClearService(authDAO, gameDAO, userDAO);
         userService = new UserService(userDAO, authDAO);
+    }
+
+    @AfterEach
+    public void reset() throws DataAccessException {
+        clearService.clear();
     }
 
     @Test

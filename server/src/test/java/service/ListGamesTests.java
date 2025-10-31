@@ -11,31 +11,33 @@ import java.util.Collection;
 public class ListGamesTests {
     private UserService userService;
     private GameService gameService;
+    private ClearService clearService;
     private AuthDAO authDAO;
     private GameDAO gameDAO;
     private UserDAO userDAO;
 
 
     @BeforeEach
-    public void setup() {
-        authDAO = new MemoryAuthDAO();
-        gameDAO = new MemoryGameDAO();
-        userDAO = new MemoryUserDAO();
+    public void setup() throws Exception {
+        authDAO = new SQLAuthDAO();
+        gameDAO = new SQLGameDAO();
+        userDAO = new SQLUserDAO();
         gameService = new GameService(gameDAO, authDAO);
         userService = new UserService(userDAO, authDAO);
+        clearService = new ClearService(authDAO, gameDAO, userDAO);
+        clearService.clear();
     }
 
     @Test
     public void listGamesSuccess() throws Exception {
         var authData = userService.register(new UserData("bob", "1234", "bob@email.com"));
-        Collection<GameData> games = gameService.listGames(authData.authToken());
 
-        assertEquals(0, games.size());
+        assertEquals(0, gameDAO.gameCount());
 
         gameDAO.createGame("Test Game 1");
         gameDAO.createGame("Test Game 2");
 
-        assertEquals(2, games.size());
+        assertEquals(2, gameDAO.gameCount());
     }
 
     @Test

@@ -17,11 +17,11 @@ public class JoinGameTests {
     private AuthData authData;
 
     @BeforeEach
-    public void setup() throws DataAccessException {
-        userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
-        gameDAO = new MemoryGameDAO();
-
+    public void setup() throws Exception {
+        userDAO = new SQLUserDAO();
+        authDAO = new SQLAuthDAO();
+        gameDAO = new SQLGameDAO();
+        userDAO.clear();
         userService = new UserService(userDAO, authDAO);
         gameService = new GameService(gameDAO, authDAO);
 

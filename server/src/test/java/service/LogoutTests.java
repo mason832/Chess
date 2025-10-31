@@ -8,13 +8,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LogoutTests {
     private UserService userService;
+    private ClearService clearService;
+    private GameService gameService;
     AuthDAO authDAO;
+    UserDAO userDAO;
+    GameDAO gameDAO;
 
     @BeforeEach
-    public void setup() {
-        UserDAO userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
+    public void setup() throws Exception {
+        userDAO = new SQLUserDAO();
+        authDAO = new SQLAuthDAO();
+        gameDAO = new SQLGameDAO();
         userService = new UserService(userDAO, authDAO);
+        clearService = new ClearService(authDAO, gameDAO, userDAO);
+        clearService.clear();
     }
 
     @Test
