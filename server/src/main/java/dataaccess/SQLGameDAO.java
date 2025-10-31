@@ -19,6 +19,17 @@ public class SQLGameDAO implements GameDAO{
             PRIMARY KEY (id)
             );""";
 
+    public SQLGameDAO() throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(createGameStatement)) {
+                preparedStatement.executeUpdate();
+            }
+        }
+        catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
     @Override
     public int createGame(String gameName) {
         return 0;
