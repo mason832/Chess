@@ -132,9 +132,9 @@ public class SQLGameDAO implements GameDAO{
 
     @Override
     public void clear() throws DataAccessException {
-        String sql = "DELETE FROM gameData";
+        String sqlStatement = "DELETE FROM gameData";
         try (Connection conn = DatabaseManager.getConnection()) {
-             try (PreparedStatement ps = conn.prepareStatement(sql)) {
+             try (PreparedStatement ps = conn.prepareStatement(sqlStatement)) {
                 ps.executeUpdate();
              }
         } catch (SQLException e) {throw new DataAccessException(e.getMessage());}

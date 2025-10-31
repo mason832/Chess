@@ -47,7 +47,7 @@ public class GameHandler {
 
             else {
                 ctx.status(500);
-                ctx.result(gson.toJson(Map.of("message", e.getMessage())));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
         }
     }
@@ -67,7 +67,7 @@ public class GameHandler {
             }
             else {
                 ctx.status(500);
-                ctx.result(gson.toJson(Map.of("message", e.getMessage())));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
         }
     }
@@ -123,7 +123,7 @@ public class GameHandler {
             }
             else {
                 ctx.status(500);
-                ctx.result(gson.toJson(Map.of("message", e.getMessage())));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
         }
     }
