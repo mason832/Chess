@@ -54,18 +54,42 @@ public class SQLGameDAO implements GameDAO{
 
     @Override
     public int gameCount() {
-
         return 0;
     }
 
     @Override
-    public GameData getGame(int gameID) {
+    public GameData getGame(int gameID) throws DataAccessException{
+        String sqlStatement = "SELECT * FROM gameData WHERE id=?";
+
+        try (Connection conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(sqlStatement)) {
+                preparedStatement.setInt(1, gameID);
+                var result = preparedStatement.executeQuery();
+
+                if (result.next()) {
+                    String white = result.getString("whiteUsername");
+                    String black = result.getString("blackUsername");
+                    String gameName = result.getString("gameName");
+                    String gameJson = result.getString("game");
+                    ChessGame game = gson.fromJson(gameJson, ChessGame.class);
+
+                    return new GameData(gameID, white, black, gameName, game);
+                }
+            }
+        } catch (SQLException e) {throw new DataAccessException(e.getMessage());}
+
         return null;
     }
 
     @Override
-    public void updateGame(int gameID, String whiteUsername, String blackUsername, String gameName, Object game) throws DataAccessException {
+    public void updateGame(int gameID, String whiteUsername, String blackUsername, String gameName, Object game) throws DataAccessException{
+        String sqlStatement = "";
 
+        try (Connection conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(sqlStatement)) {
+                //add code
+            }
+        } catch (SQLException e) {throw new DataAccessException(e.getMessage());}
     }
 
     @Override

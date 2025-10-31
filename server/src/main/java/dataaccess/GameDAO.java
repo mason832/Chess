@@ -8,7 +8,7 @@ public interface GameDAO {
 
     int gameCount();
 
-    GameData getGame(int gameID);
+    GameData getGame(int gameID) throws DataAccessException;
 
     void updateGame(int gameID, String whiteUsername, String blackUsername, String gameName, Object game) throws DataAccessException;
 
