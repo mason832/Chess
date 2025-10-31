@@ -53,7 +53,16 @@ public class SQLGameDAO implements GameDAO{
     }
 
     @Override
-    public int gameCount() {
+    public int gameCount() throws DataAccessException {
+        var statement = "SELECT COUNT(*) AS count FROM gameData";
+        try (var conn = DatabaseManager.getConnection();
+             var ps = conn.prepareStatement(statement);
+             var rs = ps.executeQuery()) {
+            if (rs.next()) {return rs.getInt("count");
+            }
+        }catch (SQLException | DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
         return 0;
     }
 
