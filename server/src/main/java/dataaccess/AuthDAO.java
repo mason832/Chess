@@ -2,11 +2,11 @@ package dataaccess;
 import model.AuthData;
 
 public interface AuthDAO {
-    void addAuth(AuthData authData) throws Exception;
+    void addAuth(AuthData authData) throws DataAccessException;
 
     int tokenCount();
 
-    AuthData getAuth(String authToken) throws Exception;
+    AuthData getAuth(String authToken) throws DataAccessException;
 
     void deleteAuth (String authToken);
 

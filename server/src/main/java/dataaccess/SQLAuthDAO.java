@@ -4,16 +4,16 @@ import model.AuthData;
 import model.UserData;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class SQLAuthDAO implements AuthDAO{
 
-    private int authCount = 0;
     private final String createAuthStatement = """
             CREATE TABLE IF NOT EXISTS authData (
-            'username' varchar(20),
-            'authToken' varchar(50),
-            PRIMARY KEY ('authToken')
-            """;
+            username varchar(20),
+            authToken varchar(100),
+            PRIMARY KEY (authToken)
+            )""";
 
     public SQLAuthDAO() throws Exception{
         DatabaseManager.createDatabase();
@@ -25,7 +25,7 @@ public class SQLAuthDAO implements AuthDAO{
     }
 
     @Override
-    public void addAuth(AuthData authData) throws Exception{
+    public void addAuth(AuthData authData) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("INSERT INTO authData (username, authToken) VALUES (?,?)")) {
                 preparedStatement.setString(1, authData.username());
@@ -33,16 +33,18 @@ public class SQLAuthDAO implements AuthDAO{
                 preparedStatement.executeUpdate();
             }
         }
-        authCount++;
+        catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
     public int tokenCount() {
-        return authCount;
+        return 0;
     }
 
     @Override
-    public AuthData getAuth(String authToken) throws Exception {
+    public AuthData getAuth(String authToken) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT username, authToken FROM authData WHERE authToken=?")) {
                 preparedStatement.setString(2, authToken);
@@ -52,21 +54,19 @@ public class SQLAuthDAO implements AuthDAO{
                     return new AuthData(username, authToken);
                 }
             }
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
         return null;
     }
 
     @Override
     public void deleteAuth(String authToken) {
-
-
-        authCount--;
+        //add code here
     }
 
     @Override
     public void clear() throws DataAccessException {
-
-
-        authCount=0;
+        //add code here
     }
 }

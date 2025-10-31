@@ -8,7 +8,7 @@ public class SQLUserDAO implements UserDAO{
     private final String createUserStatement = """
             CREATE TABLE IF NOT EXISTS user (
             username varchar(20),
-            password varchar(500),
+            password varchar(100),
             email varchar(25),
             PRIMARY KEY (username));""";
 

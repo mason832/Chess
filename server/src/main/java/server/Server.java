@@ -19,8 +19,12 @@ public class Server {
 
         //create data access objects
         UserDAO userDAO;
-        AuthDAO authDAO = new MemoryAuthDAO();
+        AuthDAO authDAO;
         GameDAO gameDAO = new MemoryGameDAO();
+
+        try {authDAO = new SQLAuthDAO();}
+        catch (Exception e) {authDAO =  new MemoryAuthDAO();}
+
         try {userDAO = new SQLUserDAO();}
         catch (Exception e) {userDAO = new MemoryUserDAO();}
 
