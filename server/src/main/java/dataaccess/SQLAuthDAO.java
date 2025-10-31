@@ -23,6 +23,11 @@ public class SQLAuthDAO implements AuthDAO{
 
     @Override
     public void addAuth(AuthData authData) throws DataAccessException {
+
+        if (authData.username()==null || authData.authToken()==null||
+        authData.username().isEmpty()||authData.authToken().isEmpty())
+            {throw new DataAccessException("bad request");}
+
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("INSERT INTO authData (username, authToken) VALUES (?,?)")) {
                 preparedStatement.setString(1, authData.username());
@@ -49,6 +54,7 @@ public class SQLAuthDAO implements AuthDAO{
 
     @Override
     public AuthData getAuth(String authToken) throws DataAccessException {
+
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT username, authToken FROM authData WHERE authToken=?")) {
                 preparedStatement.setString(1, authToken);
@@ -58,9 +64,7 @@ public class SQLAuthDAO implements AuthDAO{
                     return new AuthData(username, authToken);
                 }
             }
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getMessage());
-        }
+        } catch (SQLException e) {throw new DataAccessException(e.getMessage());}
         return null;
     }
 
