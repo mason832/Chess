@@ -1,11 +1,24 @@
 package dataaccess;
-
+import com.google.gson.Gson;
+import chess.ChessGame;
 import model.GameData;
-
 import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.sql.*;
 
 public class SQLGameDAO implements GameDAO{
+
+    private final Gson gson = new Gson();
+    private final String createGameStatement = """
+            CREATE TABLE IF NOT EXISTS gameData (
+            id INT AUTO_INCREMENT,
+            whiteUsername varchar(20),
+            blackUsername varchar(20),
+            gameName varchar(20),
+            game TEXT,
+            PRIMARY KEY (id)
+            );""";
+
     @Override
     public int createGame(String gameName) {
         return 0;
@@ -13,6 +26,7 @@ public class SQLGameDAO implements GameDAO{
 
     @Override
     public int gameCount() {
+
         return 0;
     }
 
