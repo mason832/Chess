@@ -31,8 +31,25 @@ public class SQLGameDAO implements GameDAO{
     }
 
     @Override
-    public int createGame(String gameName) {
-        return 0;
+    public int createGame(String gameName) throws DataAccessException{
+        String sqlStatement = "INSERT INTO gameData (gameName, game) VALUES (?,?)";
+        ChessGame newGame = new ChessGame();
+        String gameJson = gson.toJson(newGame);
+
+        try (Connection conn = DatabaseManager.getConnection()) {
+            try (var prepareStatement = conn.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
+                prepareStatement.setString(1, gameName);
+                prepareStatement.setString(2, gameJson);
+                prepareStatement.executeUpdate();
+
+                try (var rs = prepareStatement.getGeneratedKeys()) {
+                    if (rs.next()) {return rs.getInt(1);}
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+        throw new DataAccessException("Error: couldn't retrieve new game ID");
     }
 
     @Override
