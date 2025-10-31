@@ -107,8 +107,27 @@ public class SQLGameDAO implements GameDAO{
     }
 
     @Override
-    public Collection<GameData> listGames() {
-        return List.of();
+    public Collection<GameData> listGames() throws DataAccessException{
+        String sqlStatement = "SELECT * FROM gameData";
+        Collection<GameData> games = new ArrayList<>();
+
+        try (Connection conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(sqlStatement)) {
+                var result = preparedStatement.executeQuery();
+
+                while (result.next()) {
+                    int id = result.getInt("id");
+                    String white = result.getString("whiteUsername");
+                    String black = result.getString("blackUsername");
+                    String gameName = result.getString("gameName");
+                    String gameJson = result.getString("game");
+                    ChessGame game = gson.fromJson(gameJson, ChessGame.class);
+
+                    games.add(new GameData(id, white, black, gameName, game));
+                }
+            }
+        } catch (SQLException e) {throw new DataAccessException(e.getMessage());}
+        return games;
     }
 
     @Override
