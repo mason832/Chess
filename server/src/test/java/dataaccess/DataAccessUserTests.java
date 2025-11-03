@@ -32,4 +32,7 @@ public class DataAccessUserTests {
 
     @Test
     public void getUserFail() {}
+
+    @Test
+    public void clearTest() throws DataAccessException {}
 }

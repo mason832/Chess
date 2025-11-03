@@ -32,6 +32,8 @@ public class SQLGameDAO implements GameDAO{
 
     @Override
     public int createGame(String gameName) throws DataAccessException{
+        if (gameName.isEmpty()) {throw new DataAccessException("bad request");}
+
         String sqlStatement = "INSERT INTO gameData (gameName, game) VALUES (?,?)";
         ChessGame newGame = new ChessGame();
         String gameJson = gson.toJson(newGame);
@@ -86,7 +88,6 @@ public class SQLGameDAO implements GameDAO{
                 }
             }
         } catch (SQLException e) {throw new DataAccessException(e.getMessage());}
-
         return null;
     }
 

@@ -22,6 +22,7 @@ public class DataAccessAuthTests {
         authDAO = new SQLAuthDAO();
         clearService = new ClearService(authDAO, gameDAO, userDAO);
         UserService userService = new UserService(userDAO, authDAO);
+        userDAO.clear();
         authData = userService.register(new UserData("bob", "1234", "bob@email.com"));
     }
 
