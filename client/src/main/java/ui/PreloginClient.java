@@ -16,8 +16,11 @@ public class PreloginClient {
                 register <USERNAME> <PASSWORD> <EMAIL> - to create an account
                 login <USERNAME> <PASSWORD> - to play chess
                 quit - exit the program
-                help - show this list
                 """);
+    }
+
+    public AuthData getAuthData() {
+        return authData;
     }
 
     public boolean register(String[] input) {
@@ -38,4 +41,13 @@ public class PreloginClient {
             return false;
         }
     }
+
+    public void login() {
+        //add code
+    }
+
+    public void quit() {
+        //add code
+    }
+
 }
