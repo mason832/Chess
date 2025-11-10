@@ -9,7 +9,7 @@ public class ReadPrintLoop {
     private final ServerFacade server;
     private final Scanner scanner = new Scanner(System.in);
 
-    private PreloginClient prelogin;
+    private final PreloginClient prelogin;
     private PostloginClient postlogin;
     private AuthData authData;
     private boolean loggedIn = false;
@@ -31,31 +31,41 @@ public class ReadPrintLoop {
 
             try {
                 var command = input[0].toLowerCase();
-                if (!loggedIn) {
-                    //add code here
-                }
+
+                if (!loggedIn && preLoginCommands(command, input)) {break;}
+                else if (postLoginCommands(command, input)) break;
+
             } catch (Exception e) {System.out.println("Error: " + e.getMessage());}
         }
     }
 
-    private boolean preloginCommands(String command, String[] input) {
-        if (Objects.equals(command, "help")) {prelogin.help();}
-        else if (Objects.equals(command, "register")) {
-            loggedIn = prelogin.register(input);
-            if (loggedIn) {
-                authData = prelogin.getAuthData();
-                postlogin = new PostloginClient(server, authData);
+    private boolean preLoginCommands(String command, String[] input) {
+        switch (command) {
+            case "help" -> prelogin.help();
+            case "register" -> {
+                loggedIn = prelogin.register(input);
+                if (loggedIn) {
+                    authData = prelogin.getAuthData();
+                    postlogin = new PostloginClient(server, authData);
+                }
             }
+            case "login" -> {
+                //add code
+            }
+            case "quit" -> {
+                System.out.println("さようなら! (goodbye!)");
+                return true;
+            }
+            case null, default -> System.out.println("Command not recognized. Use help for a list of commands.");
         }
+        return false;
+    }
 
-        else if (Objects.equals(command, "login")) {
-            //add code
+    private boolean postLoginCommands(String command, String[] input) {
+        if (Objects.equals(command, "quit")) {
+            System.out.println("さようなら! (goodbye!)");
+            return true;
         }
-
-        else if (Objects.equals(command, "quit")) {
-            //add code
-        }
-
         else {System.out.println("Command not recognized. Use help for a list of commands.");}
         return false;
     }
