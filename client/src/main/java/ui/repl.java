@@ -15,4 +15,23 @@ public class repl {
         this.server = server;
         this.prelogin = new PreloginClient(server);
     }
+
+    public void run() {
+        System.out.println("Welcome to Chess! Type 'help' for commands.");
+        while (true) {
+            if (loggedIn) {System.out.println("[LOGGED_IN] >>> ");}
+            else {System.out.println("[LOGGED_OUT] >>> ");}
+
+            var input = scanner.nextLine().trim().split("\\s+");
+
+            if (!input[0].isBlank()) continue;
+
+            try {
+                var command = input[0].toLowerCase();
+                if (!loggedIn) {
+                    //add code here
+                }
+            }
+        }
+    }
 }
