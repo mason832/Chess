@@ -35,9 +35,10 @@ public class PreloginClient {
 
         try {
             authData = server.register(username, password, email);
+            System.out.println("logged in as " + username);
             return true;
         } catch (Exception e) {
-            System.out.println("Registeration failed: " + e.getMessage());
+            System.out.println("Registration failed: " + e.getMessage());
             return false;
         }
     }
