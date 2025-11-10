@@ -19,4 +19,23 @@ public class PreloginClient {
                 help - show this list
                 """);
     }
+
+    public boolean register(String[] input) {
+        if (!(input.length == 4)) {
+            System.out.println("Usage: register <USERNAME> <PASSWORD> <EMAIL>");
+            return false;
+        }
+
+        var username = input[1];
+        var password = input[2];
+        var email = input[3];
+
+        try {
+            authData = server.register(username, password, email);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Registeration failed: " + e.getMessage());
+            return false;
+        }
+    }
 }
