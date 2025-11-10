@@ -48,6 +48,15 @@ public class ReadPrintLoop {
             }
         }
 
+        else if (Objects.equals(command, "login")) {
+            //add code
+        }
+
+        else if (Objects.equals(command, "quit")) {
+            //add code
+        }
+
+        else {System.out.println("Command not recognized. Use help for a list of commands.");}
         return false;
     }
 }
