@@ -1,4 +1,5 @@
 package server;
+
 import com.google.gson.Gson;
 import model.AuthData;
 import model.UserData;
@@ -16,36 +17,34 @@ public class ServerFacade {
         this.serverUrl = "http://localhost:" + port;
     }
 
-    public AuthData register(String username, String password, String email) throws Exception{
+    public AuthData register(String username, String password, String email) throws Exception {
         var user = new UserData(username, password, email);
 
-        var url = new URL(serverUrl+"/user");
+        var url = new URL(serverUrl + "/user/register");
         var conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
 
-        //write Json body
+        // write JSON body
         try (var out = new OutputStreamWriter(conn.getOutputStream())) {
             gson.toJson(user, out);
         }
 
-        //error handling
         var status = conn.getResponseCode();
 
         if (status == 200) {
-            try (var in = new InputStreamReader(conn.getErrorStream())) {
+            try (var in = new InputStreamReader(conn.getInputStream())) {
                 return gson.fromJson(in, AuthData.class);
             }
-        }
-
-        else {
+        } else {
             String message;
             try (var error = new InputStreamReader(conn.getErrorStream())) {
                 message = gson.fromJson(error, String.class);
             } catch (Exception e) {
                 message = "Server returned status " + status;
-            } throw new Exception(message);
+            }
+            throw new Exception(message);
         }
     }
 }

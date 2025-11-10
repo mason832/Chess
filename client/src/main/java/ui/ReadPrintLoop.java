@@ -22,18 +22,21 @@ public class ReadPrintLoop {
     public void run() {
         System.out.println("Welcome to 240 Chess! Type Help to get started.");
         while (true) {
-            if (loggedIn) {System.out.println("[LOGGED_IN] >>> ");}
-            else {System.out.println("[LOGGED_OUT] >>> ");}
+            if (loggedIn) {System.out.print("[LOGGED_IN] >>> ");}
+            else {System.out.print("[LOGGED_OUT] >>> ");}
 
             var input = scanner.nextLine().trim().split("\\s+");
 
-            if (!input[0].isBlank()) continue;
+            if (input[0].isBlank()) continue;
 
             try {
                 var command = input[0].toLowerCase();
 
-                if (!loggedIn && preLoginCommands(command, input)) {break;}
-                else if (postLoginCommands(command, input)) break;
+                if (!loggedIn) {
+                    if (preLoginCommands(command, input)) break;
+                } else {
+                    if (postLoginCommands(command, input)) break;
+                }
 
             } catch (Exception e) {System.out.println("Error: " + e.getMessage());}
         }
@@ -56,7 +59,7 @@ public class ReadPrintLoop {
                 System.out.println("さようなら! (goodbye!)");
                 return true;
             }
-            case null, default -> System.out.println("Command not recognized. Use help for a list of commands.");
+            default -> System.out.println("Command not recognized. Use help for a list of commands.");
         }
         return false;
     }
