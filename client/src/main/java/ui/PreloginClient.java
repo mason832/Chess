@@ -47,8 +47,5 @@ public class PreloginClient {
         //add code
     }
 
-    public void quit() {
-        //add code
-    }
 
 }

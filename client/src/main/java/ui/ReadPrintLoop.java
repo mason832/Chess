@@ -65,11 +65,15 @@ public class ReadPrintLoop {
     }
 
     private boolean postLoginCommands(String command, String[] input) {
-        if (Objects.equals(command, "quit")) {
-            System.out.println("さようなら! (goodbye!)");
-            return true;
+        switch(command) {
+            case "help" -> postlogin.help();
+
+            case "quit" -> {
+                authData = null;
+                System.out.println("さようなら! (goodbye!)");
+                return true;
+            }
         }
-        else {System.out.println("Command not recognized. Use help for a list of commands.");}
         return false;
     }
 }
