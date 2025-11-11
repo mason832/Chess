@@ -68,11 +68,15 @@ public class ReadPrintLoop {
         switch(command) {
             case "help" -> postlogin.help();
 
+            case "logout" -> loggedIn = postlogin.logout(authData);
+
             case "quit" -> {
-                authData = null;
+                loggedIn = postlogin.logout(authData);
                 System.out.println("さようなら! (goodbye!)");
                 return true;
             }
+
+            default -> System.out.println("This is not a recognized command, use help to see a list of available commands");
         }
         return false;
     }

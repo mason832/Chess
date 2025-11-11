@@ -19,4 +19,9 @@ public class PostloginClient {
                 quit - playing chess""");
     }
 
+    public boolean logout (AuthData authData) {
+        authData = null;
+        return false;
+    }
+
 }
