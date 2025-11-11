@@ -13,14 +13,14 @@ public class ServerFacade {
     private final String serverUrl;
     private final Gson gson = new Gson();
 
-    public ServerFacade(int port) {
-        this.serverUrl = "http://localhost:" + port;
+    public ServerFacade() {
+        this.serverUrl = "http://localhost:8080";
     }
 
     public AuthData register(String username, String password, String email) throws Exception {
         var user = new UserData(username, password, email);
 
-        var url = new URL(serverUrl + "/user/register");
+        var url = new URL(serverUrl + "/user");  // ✅ correct endpoint
         var conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json");
@@ -31,7 +31,7 @@ public class ServerFacade {
             gson.toJson(user, out);
         }
 
-        var status = conn.getResponseCode();
+        int status = conn.getResponseCode();
 
         if (status == 200) {
             try (var in = new InputStreamReader(conn.getInputStream())) {
@@ -42,9 +42,11 @@ public class ServerFacade {
             try (var error = new InputStreamReader(conn.getErrorStream())) {
                 message = gson.fromJson(error, String.class);
             } catch (Exception e) {
-                message = "Server returned status " + status;
+                if (status == 403) {message = "Username already taken";}
+                else {message = "Server returned " + status + e.getMessage();}
             }
             throw new Exception(message);
         }
     }
+
 }
