@@ -2,6 +2,8 @@ package ui;
 import model.AuthData;
 import server.ServerFacade;
 
+import java.util.Objects;
+
 
 public class PreloginClient {
     private final ServerFacade server;
@@ -43,8 +45,9 @@ public class PreloginClient {
 
     private boolean responseHandling(String command, String[] input) {
         try {
-            authData = server.login(input[1], input[2]);
-            System.out.println("Logged in as "+input[1]);
+            if (Objects.equals(command, "register")) {authData = server.register(input[1], input[2], input[3]);}
+            else if (Objects.equals(command, "login")) {authData = server.login(input[1], input[2]);}
+            System.out.println("Logged in as " + input[1]);
             return true;
         }
         catch(Exception e) {

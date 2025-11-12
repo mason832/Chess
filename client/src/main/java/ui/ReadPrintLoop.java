@@ -54,7 +54,10 @@ public class ReadPrintLoop {
             }
             case "login" -> {
                 loggedIn = prelogin.login(input);
-                if (authData!=null) postlogin = new PostloginClient(server, authData);
+                if (loggedIn) {
+                    authData = prelogin.getAuthData();
+                    postlogin = new PostloginClient(server, authData);
+                }
             }
             case "quit" -> {
                 System.out.println("さようなら! (goodbye!)");
