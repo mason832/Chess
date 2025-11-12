@@ -43,8 +43,23 @@ public class PreloginClient {
         }
     }
 
-    public void login() {
-        //add code
+    public AuthData login(String[] input, boolean loggedIn) {
+        if (input.length != 3 || input[1] == null || input[2] == null) {
+            System.out.println("Usage: login <USERNAME> <PASSWORD>");
+            return null;
+        }
+
+        String username = input[1];
+        String password = input[2];
+
+        authData = server.login(username, password);
+
+        if (authData!=null) {
+            loggedIn = true;
+        } else {
+            System.out.println("Unauthorized");
+        }
+        return authData;
     }
 
 

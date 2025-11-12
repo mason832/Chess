@@ -49,4 +49,9 @@ public class ServerFacade {
         }
     }
 
+    public AuthData login(String username, String password) {
+        //add code
+        return null;
+    }
+
 }

@@ -53,7 +53,8 @@ public class ReadPrintLoop {
                 }
             }
             case "login" -> {
-                //add code
+                authData = prelogin.login(input, loggedIn);
+                if (authData!=null) postlogin = new PostloginClient(server, authData);
             }
             case "quit" -> {
                 System.out.println("さようなら! (goodbye!)");
@@ -69,6 +70,14 @@ public class ReadPrintLoop {
             case "help" -> postlogin.help();
 
             case "logout" -> loggedIn = postlogin.logout(authData);
+
+            case "create" -> {}
+
+            case "list" -> {}
+
+            case "join" -> {}
+
+            case "observe" -> {}
 
             case "quit" -> {
                 loggedIn = postlogin.logout(authData);
