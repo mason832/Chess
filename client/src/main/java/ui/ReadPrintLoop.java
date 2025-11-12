@@ -72,7 +72,7 @@ public class ReadPrintLoop {
         switch(command) {
             case "help" -> postlogin.help();
 
-            case "logout" -> loggedIn = postlogin.logout(authData);
+            case "logout" -> loggedIn = postlogin.logout();
 
             case "create" -> {}
 
@@ -83,7 +83,7 @@ public class ReadPrintLoop {
             case "observe" -> {}
 
             case "quit" -> {
-                loggedIn = postlogin.logout(authData);
+                loggedIn = postlogin.logout();
                 System.out.println("さようなら! (goodbye!)");
                 return true;
             }

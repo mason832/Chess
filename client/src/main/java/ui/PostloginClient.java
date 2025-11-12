@@ -4,9 +4,10 @@ import model.AuthData;
 import server.ServerFacade;
 
 public class PostloginClient {
+    private AuthData authData;
 
     public PostloginClient(ServerFacade server, AuthData authData) {
-     //add code
+     this.authData = authData;
     }
 
     public void help() {
@@ -19,7 +20,7 @@ public class PostloginClient {
                 quit - playing chess""");
     }
 
-    public boolean logout (AuthData authData) {
+    public boolean logout () {
         authData = null;
         return false;
     }
