@@ -53,7 +53,7 @@ public class ReadPrintLoop {
                 }
             }
             case "login" -> {
-                authData = prelogin.login(input, loggedIn);
+                loggedIn = prelogin.login(input);
                 if (authData!=null) postlogin = new PostloginClient(server, authData);
             }
             case "quit" -> {

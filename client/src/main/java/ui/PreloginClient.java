@@ -29,38 +29,27 @@ public class PreloginClient {
             return false;
         }
 
-        var username = input[1];
-        var password = input[2];
-        var email = input[3];
+        return responseHandling("register", input);
+    }
 
+    public boolean login(String[] input) {
+        if (input.length != 3) {
+            System.out.println("Usage: login <USERNAME> <PASSWORD>");
+            return false;
+        }
+
+        return responseHandling("login", input);
+    }
+
+    private boolean responseHandling(String command, String[] input) {
         try {
-            authData = server.register(username, password, email);
-            System.out.println("logged in as " + username);
+            authData = server.login(input[1], input[2]);
+            System.out.println("Logged in as "+input[1]);
             return true;
-        } catch (Exception e) {
-            System.out.println("Registration failed: " + e.getMessage());
+        }
+        catch(Exception e) {
+            System.out.println(command + " failed: " + e.getMessage());
             return false;
         }
     }
-
-    public AuthData login(String[] input, boolean loggedIn) {
-        if (input.length != 3 || input[1] == null || input[2] == null) {
-            System.out.println("Usage: login <USERNAME> <PASSWORD>");
-            return null;
-        }
-
-        String username = input[1];
-        String password = input[2];
-
-        authData = server.login(username, password);
-
-        if (authData!=null) {
-            loggedIn = true;
-        } else {
-            System.out.println("Unauthorized");
-        }
-        return authData;
-    }
-
-
 }
