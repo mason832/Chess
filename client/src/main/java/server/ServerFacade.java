@@ -14,44 +14,57 @@ public class ServerFacade {
     private final Gson gson = new Gson();
 
     public ServerFacade() {
-        this.serverUrl = "http://localhost:8080";
+        serverUrl = "http://localhost:8080";
     }
 
     public AuthData register(String username, String password, String email) throws Exception {
         var user = new UserData(username, password, email);
 
-        var url = new URL(serverUrl + "/user");  // ✅ correct endpoint
+        var url = new URL(serverUrl + "/user");
         var conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
 
-        // write JSON body
+        // write json body
         try (var out = new OutputStreamWriter(conn.getOutputStream())) {
             gson.toJson(user, out);
         }
+        return ErrorHandling(conn, AuthData.class);
+    }
 
-        int status = conn.getResponseCode();
+    public AuthData login(String username, String password) throws Exception {
+        var user = new UserData(username, password, null);
 
-        if (status == 200) {
-            try (var in = new InputStreamReader(conn.getInputStream())) {
-                return gson.fromJson(in, AuthData.class);
+        var url = new URL(serverUrl + "/session");
+        var conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        //write json body
+        try (var out = new OutputStreamWriter(conn.getOutputStream())) {
+            gson.toJson(user, out);
+        }
+        return ErrorHandling(conn, AuthData.class);
+    }
+
+    private <T> T ErrorHandling(HttpURLConnection conn, Class<T> responseType) throws Exception {
+        if (conn.getResponseCode()==200) {
+            try (var input = new InputStreamReader(conn.getInputStream())) {
+                return gson.fromJson(input, responseType);
             }
-        } else {
+        }
+        else {
             String message;
-            try (var error = new InputStreamReader(conn.getErrorStream())) {
+            try(var error = new InputStreamReader(conn.getErrorStream())) {
                 message = gson.fromJson(error, String.class);
-            } catch (Exception e) {
-                if (status == 403) {message = "Username already taken";}
-                else {message = "Server returned " + status + e.getMessage();}
+            }
+            catch (Exception e) {
+                message = "Server returned status"+conn.getResponseCode();
             }
             throw new Exception(message);
         }
-    }
-
-    public AuthData login(String username, String password) {
-        //add code
-        return null;
     }
 
 }
