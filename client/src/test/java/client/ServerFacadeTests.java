@@ -20,9 +20,13 @@ public class ServerFacadeTests {
         facade = new ServerFacade(port);
     }
 
-    @AfterAll
-    static void stopServer() throws Exception {
+    @AfterEach
+    void reset() throws Exception {
         facade.clear();
+    }
+
+    @AfterAll
+    static void stopServer(){
         server.stop();
     }
 
@@ -52,12 +56,26 @@ public class ServerFacadeTests {
 
     @Test
     public void loginPassTest() throws Exception {
-        //add code
+        facade.register("joe", "1234", "joe@email.com");
+
+        AuthData authData = facade.login("joe", "1234");
+
+        assertNotNull(authData);
     }
 
     @Test
     public void loginFailTest() throws Exception{
-        //add code
+        facade.register("joe", "1234", "joe@email.com");
+
+        Exception e = assertThrows(Exception.class, () ->
+                facade.login("judy", "1234"));
+
+        assertTrue(e.getMessage().contains("unauthorized"));
+
+        e = assertThrows(Exception.class, () ->
+                facade.login("joe", "123"));
+
+        assertTrue(e.getMessage().contains("unauthorized"));
     }
 
     @Test
