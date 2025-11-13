@@ -64,12 +64,12 @@ public class ServerFacade {
                 var games = (java.util.List<java.util.Map<String, Object>>) response.get("games");
 
                 for (var game : games) {
-                    var id = game.get("id");
+                    var id = game.get("gameID");
                     var name = game.get("gameName");
                     var white = game.get("whiteUsername");
                     var black = game.get("blackUsername");
 
-                    System.out.printf("ID: "+id+" | Name: "+name+" | White: "+white+" | Black: "+black);
+                    System.out.printf("ID: "+id+" | Name: "+name+" | White: "+white+" | Black: "+black+"\n");
                 }
             }
         }

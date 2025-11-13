@@ -26,7 +26,15 @@ public class PostloginClient {
         }
     }
 
-    public void list() {}
+    public void list(String[] input) {
+        if (input.length!=1) {
+            System.out.println("Usage: list");
+            return;
+        }
+
+        try {server.listGames(authData.authToken());}
+        catch(Exception e) {System.out.println("List games failed: " + e.getMessage());}
+    }
 
     public void help() {
         System.out.println("""
