@@ -3,7 +3,6 @@ import org.junit.jupiter.api.*;
 import server.Server;
 import server.ServerFacade;
 import model.AuthData;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -29,7 +28,6 @@ public class ServerFacadeTests {
     static void stopServer(){
         server.stop();
     }
-
 
     @Test
     public void registerPassTest() throws Exception {
@@ -80,12 +78,24 @@ public class ServerFacadeTests {
 
     @Test
     public void logoutPassTest()throws Exception {
-        //add code
+        AuthData authData = facade.register("joe", "1234", "email");
+        assertNotNull(authData);
+        assertNotNull(authData.authToken());
+
+        assertDoesNotThrow(()->facade.logout(authData.authToken()));
+
+        assertThrows(Exception.class, () ->
+                facade.createGame(authData.authToken(), "testGame"));
     }
 
     @Test
     public void logoutFailTest()throws Exception {
-        //add code
+        AuthData authData = facade.register("joe", "1234", "email");
+        assertNotNull(authData);
+        assertNotNull(authData.authToken());
+
+        Exception e = assertThrows(Exception.class, ()->facade.logout("falseAuthToken"));
+        assertTrue(e.getMessage().contains("unauthorized"));
     }
 
     @Test
@@ -98,6 +108,25 @@ public class ServerFacadeTests {
         //add code
     }
 
-    @Test void clear() throws Exception {}
+    @Test
+    public void listPassTest()throws Exception {
+        //add code
+    }
 
+    @Test
+    public void listFailTest()throws Exception {
+        //add code
+    }
+
+    @Test
+    public void observePassTest()throws Exception {
+        //add code
+    }
+
+    @Test
+    public void observeFailTest()throws Exception {
+        //add code
+    }
+
+    @Test void clear()throws Exception {}
 }
