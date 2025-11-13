@@ -78,7 +78,7 @@ public class ServerFacadeTests {
 
     @Test
     public void logoutPassTest()throws Exception {
-        AuthData authData = facade.register("joe", "1234", "email");
+        AuthData authData = facade.register("joe", "1234", "joe@email.com");
         assertNotNull(authData);
         assertNotNull(authData.authToken());
 
@@ -90,7 +90,7 @@ public class ServerFacadeTests {
 
     @Test
     public void logoutFailTest()throws Exception {
-        AuthData authData = facade.register("joe", "1234", "email");
+        AuthData authData = facade.register("joe", "1234", "joe@email.com");
         assertNotNull(authData);
         assertNotNull(authData.authToken());
 
@@ -100,22 +100,32 @@ public class ServerFacadeTests {
 
     @Test
     public void createPassTest()throws Exception {
-        //add code
+        AuthData authData = facade.register("joe", "1234", "joe@email.com");
+        assertDoesNotThrow(() -> facade.createGame(authData.authToken(), "testGame"));
     }
 
     @Test
-    public void createFailTest()throws Exception {
-        //add code
+    public void createFailTest() {
+        Exception e = assertThrows(Exception.class, () ->
+                facade.createGame("fakeAuthToken", "testGame"));
+
+        assertTrue(e.getMessage().contains("unauthorized"));
     }
 
     @Test
     public void listPassTest()throws Exception {
-        //add code
+        var authData = facade.register("joe", "1234", "joe@email.com");
+
+        facade.createGame(authData.authToken(), "My Game A");
+        facade.createGame(authData.authToken(), "My Game B");
+
+        assertDoesNotThrow(() -> facade.listGames(authData.authToken()));
     }
 
     @Test
-    public void listFailTest()throws Exception {
-        //add code
+    public void listFailTest() {
+        Exception e = assertThrows(Exception.class, ()-> facade.listGames("fakeAuthToken"));
+        assertTrue(e.getMessage().contains("unauthorized"));
     }
 
     @Test
