@@ -26,6 +26,8 @@ public class PostloginClient {
         }
     }
 
+    public void list() {}
+
     public void help() {
         System.out.println("""
                 create <NAME> - a game

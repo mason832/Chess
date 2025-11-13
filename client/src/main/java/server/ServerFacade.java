@@ -55,9 +55,25 @@ public class ServerFacade {
         }
     }
 
-    public Collection<Object> listGame() {
-        //add code
-        return null;
+    public void listGames(String authToken) throws Exception {
+        var conn = makeRequest("/game", "GET", null, authToken);
+
+        if (conn.getResponseCode()==200) {
+            try (var input = new InputStreamReader(conn.getInputStream())) {
+                var response = gson.fromJson(input, java.util.Map.class);
+                var games = (java.util.List<java.util.Map<String, Object>>) response.get("games");
+
+                for (var game : games) {
+                    var id = game.get("id");
+                    var name = game.get("gameName");
+                    var white = game.get("whiteUsername");
+                    var black = game.get("blackUsername");
+
+                    System.out.printf("ID: "+id+" | Name: "+name+" | White: "+white+" | Black: "+black);
+                }
+            }
+        }
+        else {handleError(conn);}
     }
 
     public void joinGame(int gameID, String playerColor) {
