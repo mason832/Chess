@@ -12,8 +12,8 @@ public class ServerFacade {
     private final String serverUrl;
     private final Gson gson = new Gson();
 
-    public ServerFacade() {
-        serverUrl = "http://localhost:8080";
+    public ServerFacade(int port) {
+        serverUrl = "http://localhost:" + port;
     }
 
     public AuthData register(String username, String password, String email) throws Exception {
@@ -85,6 +85,21 @@ public class ServerFacade {
         //add code
     }
 
+    public void clear() throws Exception {
+        var url = new URL(serverUrl + "/db");
+        var conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("DELETE");
+
+        conn.connect();
+
+        var status = conn.getResponseCode();
+
+        if (status != 200) {
+            handleError(conn);
+        }
+    }
+
+
     private HttpURLConnection makeRequest(String endpoint, String method,
                                           Object requestBody, String authToken) throws Exception {
         var url = new URL(serverUrl+endpoint);
@@ -121,7 +136,10 @@ public class ServerFacade {
             message = gson.fromJson(error, String.class);
         }
         catch (Exception e) {
-            message = "Server returned status " + conn.getResponseCode();
+            if (conn.getResponseCode()==400) {message = "bad request";}
+            else if (conn.getResponseCode()==401) {message = "unauthorized";}
+            else if (conn.getResponseCode()==403) {message = "already taken";}
+            else {message = "Server returned status " + conn.getResponseCode();}
         }
         throw new Exception(message);
     }

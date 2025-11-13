@@ -1,102 +1,85 @@
 package client;
 import org.junit.jupiter.api.*;
 import server.Server;
+import server.ServerFacade;
+import model.AuthData;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ServerFacadeTests {
 
     private static Server server;
+    private static ServerFacade facade;
 
     @BeforeAll
     public static void init() {
         server = new Server();
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
+        facade = new ServerFacade(port);
     }
 
     @AfterAll
-    static void stopServer() {
+    static void stopServer() throws Exception {
+        facade.clear();
         server.stop();
     }
 
 
     @Test
-    public void registerPassTest() {
+    public void registerPassTest() throws Exception {
+        var authData = facade.register("joe", "1234", "joe@email.com");
+
+        assertNotNull(authData);
+        assertNotNull(authData.authToken());
+    }
+
+    @Test
+    public void registerFailTest() throws Exception {
+        facade.register("joe", "1234", "joe@email.com");
+
+        Exception e = assertThrows(Exception.class, () ->
+                facade.register("joe", "1234", "joe@email.com"));
+
+        assertTrue(e.getMessage().contains("already taken"));
+
+        e = assertThrows(Exception.class, () ->
+                facade.register("","",""));
+
+        assertTrue(e.getMessage().contains("bad request"));
+    }
+
+    @Test
+    public void loginPassTest() throws Exception {
         //add code
     }
 
     @Test
-    public void registerFailTest() {
+    public void loginFailTest() throws Exception{
         //add code
     }
 
     @Test
-    public void quitPassTest() {
+    public void logoutPassTest()throws Exception {
         //add code
     }
 
     @Test
-    public void quitFailTest() {
-        //add code
-        }
-
-    @Test
-    public void loginPassTest() {
+    public void logoutFailTest()throws Exception {
         //add code
     }
 
     @Test
-    public void loginFailTest() {
+    public void createPassTest()throws Exception {
         //add code
     }
 
     @Test
-    public void logoutPassTest() {
+    public void createFailTest()throws Exception {
         //add code
     }
 
-    @Test
-    public void logoutFailTest() {
-        //add code
-    }
+    @Test void clear() throws Exception {}
 
-    @Test
-    public void createPassTest() {
-        //add code
-    }
-
-    @Test
-    public void createFailTest() {
-        //add code
-    }
-
-    @Test
-    public void listPassTest() {
-        //add code
-    }
-
-    @Test
-    public void listFailTest() {
-        //add code
-    }
-
-    @Test
-    public void playPassTest() {
-        //add code
-    }
-
-    @Test
-    public void playFailTest() {
-        //add code
-    }
-
-    @Test
-    public void observePassTest() {
-        //add code
-    }
-
-    @Test
-    public void observeFailTest() {
-        //add code
-    }
 }
