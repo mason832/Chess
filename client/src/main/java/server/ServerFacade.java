@@ -1,9 +1,7 @@
 package server;
-
 import com.google.gson.Gson;
 import model.AuthData;
 import model.UserData;
-
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -26,7 +24,7 @@ public class ServerFacade {
         try (var out = new OutputStreamWriter(conn.getOutputStream())) {
             gson.toJson(user, out);
         }
-        return ErrorHandling(conn, AuthData.class);
+        return responseHandling(conn, AuthData.class);
     }
 
     public AuthData login(String username, String password) throws Exception {
@@ -37,19 +35,38 @@ public class ServerFacade {
         try (var out = new OutputStreamWriter(conn.getOutputStream())) {
             gson.toJson(user, out);
         }
-        return ErrorHandling(conn, AuthData.class);
+        return responseHandling(conn, AuthData.class);
     }
 
-    public void createGame(String authToken, String gameName) {}
+    public void createGame(String authToken, String gameName) throws Exception{
+        var body = new java.util.HashMap<String, String>();
+        body.put("gameName", gameName);
+
+        var conn = makeRequest("/game", "POST", body, authToken);
+
+        if (conn.getResponseCode()==200) {
+            try(var input = new InputStreamReader(conn.getInputStream())) {
+                var response = gson.fromJson(input, java.util.Map.class);
+                System.out.println("Game ID: " + response.get("gameID"));
+            }
+        }
+        else {
+            handleError(conn);
+        }
+    }
 
     public Collection<Object> listGame() {
         //add code
         return null;
     }
 
-    public void joinGame(int gameID, String playerColor) {}
+    public void joinGame(int gameID, String playerColor) {
+        //add code
+    }
 
-    public void observeGame(int gameID) {}
+    public void observeGame(int gameID) {
+        //add code
+    }
 
     private HttpURLConnection makeRequest(String endpoint, String method,
                                           Object requestBody, String authToken) throws Exception {
@@ -69,22 +86,27 @@ public class ServerFacade {
         return conn;
     }
 
-    private <T> T ErrorHandling(HttpURLConnection conn, Class<T> responseType) throws Exception {
+    private <T> T responseHandling(HttpURLConnection conn, Class<T> responseType) throws Exception {
         if (conn.getResponseCode()==200) {
             try (var input = new InputStreamReader(conn.getInputStream())) {
                 return gson.fromJson(input, responseType);
             }
         }
         else {
-            String message;
-            try(var error = new InputStreamReader(conn.getErrorStream())) {
-                message = gson.fromJson(error, String.class);
-            }
-            catch (Exception e) {
-                message = "Server returned status " + conn.getResponseCode();
-            }
-            throw new Exception(message);
+            handleError(conn);
+            return null;
         }
+    }
+
+    private void handleError(HttpURLConnection conn) throws Exception {
+        String message;
+        try(var error = new InputStreamReader(conn.getErrorStream())) {
+            message = gson.fromJson(error, String.class);
+        }
+        catch (Exception e) {
+            message = "Server returned status " + conn.getResponseCode();
+        }
+        throw new Exception(message);
     }
 
 }

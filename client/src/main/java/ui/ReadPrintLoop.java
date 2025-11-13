@@ -81,7 +81,7 @@ public class ReadPrintLoop {
 
             case "logout" -> loggedIn = postlogin.logout();
 
-            case "create" -> {}
+            case "create" -> postlogin.createGame(input);
 
             case "list" -> {}
 

@@ -10,6 +10,8 @@ public class PostloginClient {
      this.authData = authData;
     }
 
+    public void createGame(String[] input) {}
+
     public void help() {
         System.out.println("""
                 create <NAME> - a game
