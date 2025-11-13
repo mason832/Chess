@@ -62,14 +62,15 @@ public class ServerFacade {
             try (var input = new InputStreamReader(conn.getInputStream())) {
                 var response = gson.fromJson(input, java.util.Map.class);
                 var games = (java.util.List<java.util.Map<String, Object>>) response.get("games");
-
+                int counter = 1;
                 for (var game : games) {
                     var id = game.get("gameID");
                     var name = game.get("gameName");
                     var white = game.get("whiteUsername");
                     var black = game.get("blackUsername");
 
-                    System.out.printf("ID: "+id+" | Name: "+name+" | White: "+white+" | Black: "+black+"\n");
+                    System.out.printf("Game: "+counter+" | ID: "+id+" | Name: "+name+" | White: "+white+" | Black: "+black+"\n");
+                    counter++;
                 }
             }
         }

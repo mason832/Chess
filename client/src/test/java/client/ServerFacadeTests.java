@@ -1,5 +1,4 @@
 package client;
-
 import org.junit.jupiter.api.*;
 import server.Server;
 
@@ -22,8 +21,82 @@ public class ServerFacadeTests {
 
 
     @Test
-    public void sampleTest() {
-        Assertions.assertTrue(true);
+    public void registerPassTest() {
+        //add code
     }
 
+    @Test
+    public void registerFailTest() {
+        //add code
+    }
+
+    @Test
+    public void quitPassTest() {
+        //add code
+    }
+
+    @Test
+    public void quitFailTest() {
+        //add code
+        }
+
+    @Test
+    public void loginPassTest() {
+        //add code
+    }
+
+    @Test
+    public void loginFailTest() {
+        //add code
+    }
+
+    @Test
+    public void logoutPassTest() {
+        //add code
+    }
+
+    @Test
+    public void logoutFailTest() {
+        //add code
+    }
+
+    @Test
+    public void createPassTest() {
+        //add code
+    }
+
+    @Test
+    public void createFailTest() {
+        //add code
+    }
+
+    @Test
+    public void listPassTest() {
+        //add code
+    }
+
+    @Test
+    public void listFailTest() {
+        //add code
+    }
+
+    @Test
+    public void playPassTest() {
+        //add code
+    }
+
+    @Test
+    public void playFailTest() {
+        //add code
+    }
+
+    @Test
+    public void observePassTest() {
+        //add code
+    }
+
+    @Test
+    public void observeFailTest() {
+        //add code
+    }
 }
