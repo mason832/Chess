@@ -46,8 +46,8 @@ public class PostloginClient {
                 quit - playing chess""");
     }
 
-    public boolean logout () {
-        authData = null;
+    public boolean logout (String authToken) throws Exception {
+        server.logout(authToken);
         return false;
     }
 

@@ -38,6 +38,13 @@ public class ServerFacade {
         return responseHandling(conn, AuthData.class);
     }
 
+    public void logout(String authToken) throws Exception {
+        var conn = makeRequest("/session", "DELETE", null, authToken);
+
+        if (conn.getResponseCode()==200) {conn.disconnect();}
+        else {handleError(conn);}
+    }
+
     public void createGame(String authToken, String gameName) throws Exception{
         var body = new java.util.HashMap<String, String>();
         body.put("gameName", gameName);

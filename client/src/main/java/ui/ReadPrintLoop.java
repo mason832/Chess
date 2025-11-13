@@ -69,17 +69,17 @@ public class ReadPrintLoop {
         return false;
     }
 
-    private boolean postLoginCommands(String command, String[] input) {
+    private boolean postLoginCommands(String command, String[] input) throws Exception {
         switch(command) {
             case "help" -> postlogin.help();
 
             case "quit" -> {
-                loggedIn = postlogin.logout();
+                loggedIn = postlogin.logout(authData.authToken());
                 System.out.println("さようなら! (goodbye!)");
                 return true;
             }
 
-            case "logout" -> loggedIn = postlogin.logout();
+            case "logout" -> loggedIn = postlogin.logout(authData.authToken());
 
             case "create" -> postlogin.createGame(input);
 
