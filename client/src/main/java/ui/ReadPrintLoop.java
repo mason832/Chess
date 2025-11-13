@@ -45,6 +45,7 @@ public class ReadPrintLoop {
     private boolean preLoginCommands(String command, String[] input) {
         switch (command) {
             case "help" -> prelogin.help();
+
             case "register" -> {
                 loggedIn = prelogin.register(input);
                 if (loggedIn) {
@@ -72,6 +73,12 @@ public class ReadPrintLoop {
         switch(command) {
             case "help" -> postlogin.help();
 
+            case "quit" -> {
+                loggedIn = postlogin.logout();
+                System.out.println("さようなら! (goodbye!)");
+                return true;
+            }
+
             case "logout" -> loggedIn = postlogin.logout();
 
             case "create" -> {}
@@ -81,12 +88,6 @@ public class ReadPrintLoop {
             case "join" -> {}
 
             case "observe" -> {}
-
-            case "quit" -> {
-                loggedIn = postlogin.logout();
-                System.out.println("さようなら! (goodbye!)");
-                return true;
-            }
 
             default -> System.out.println("This is not a recognized command, use help to see a list of available commands");
         }

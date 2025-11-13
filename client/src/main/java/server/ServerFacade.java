@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collection;
 
 public class ServerFacade {
     private final String serverUrl;
@@ -19,12 +20,7 @@ public class ServerFacade {
 
     public AuthData register(String username, String password, String email) throws Exception {
         var user = new UserData(username, password, email);
-
-        var url = new URL(serverUrl + "/user");
-        var conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
+        var conn = makeRequest("/user", "POST", user, null);
 
         // write json body
         try (var out = new OutputStreamWriter(conn.getOutputStream())) {
@@ -35,18 +31,42 @@ public class ServerFacade {
 
     public AuthData login(String username, String password) throws Exception {
         var user = new UserData(username, password, null);
-
-        var url = new URL(serverUrl + "/session");
-        var conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
+        var conn = makeRequest("/session", "POST", user, null);
 
         //write json body
         try (var out = new OutputStreamWriter(conn.getOutputStream())) {
             gson.toJson(user, out);
         }
         return ErrorHandling(conn, AuthData.class);
+    }
+
+    public void createGame(String authToken, String gameName) {}
+
+    public Collection<Object> listGame() {
+        //add code
+        return null;
+    }
+
+    public void joinGame(int gameID, String playerColor) {}
+
+    public void observeGame(int gameID) {}
+
+    private HttpURLConnection makeRequest(String endpoint, String method,
+                                          Object requestBody, String authToken) throws Exception {
+        var url = new URL(serverUrl+endpoint);
+        var conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod(method);
+        conn.setRequestProperty("Content-type", "application/json");
+
+        if (authToken!=null) {conn.setRequestProperty("Authorization", authToken);}
+        conn.setDoOutput(true);
+
+        if (requestBody!=null){
+            try (var out = new OutputStreamWriter(conn.getOutputStream())){
+                gson.toJson(requestBody, out);
+            }
+        }
+        return conn;
     }
 
     private <T> T ErrorHandling(HttpURLConnection conn, Class<T> responseType) throws Exception {
@@ -61,7 +81,7 @@ public class ServerFacade {
                 message = gson.fromJson(error, String.class);
             }
             catch (Exception e) {
-                message = "Server returned status"+conn.getResponseCode();
+                message = "Server returned status " + conn.getResponseCode();
             }
             throw new Exception(message);
         }
