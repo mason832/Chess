@@ -2,6 +2,7 @@ package server;
 import com.google.gson.Gson;
 import model.AuthData;
 import model.UserData;
+import model.GameData;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -84,8 +85,15 @@ public class ServerFacade {
         else {handleError(conn);}
     }
 
-    public void joinGame(int gameID, String playerColor) {
-        //add code
+    public void joinGame(int gameID, String playerColor, String authToken) throws Exception {
+        var body = new java.util.HashMap<String, Object>();
+        body.put("gameID", gameID);
+        body.put("playerColor", playerColor);
+
+        var conn = makeRequest("/game", "PUT", body, authToken);
+
+        if (conn.getResponseCode()==200) {conn.disconnect();}
+        else {handleError(conn);}
     }
 
     public void observeGame(int gameID) {
@@ -105,7 +113,6 @@ public class ServerFacade {
             handleError(conn);
         }
     }
-
 
     private HttpURLConnection makeRequest(String endpoint, String method,
                                           Object requestBody, String authToken) throws Exception {
@@ -146,7 +153,7 @@ public class ServerFacade {
             if (conn.getResponseCode()==400) {message = "bad request";}
             else if (conn.getResponseCode()==401) {message = "unauthorized";}
             else if (conn.getResponseCode()==403) {message = "already taken";}
-            else {message = "Server returned status " + conn.getResponseCode();}
+            else {message = "Error: " + conn.getResponseMessage();}
         }
         throw new Exception(message);
     }
