@@ -129,6 +129,16 @@ public class ServerFacadeTests {
     }
 
     @Test
+    public void joinPassTest()throws Exception {
+        //add code
+    }
+
+    @Test
+    public void joinFailTest()throws Exception {
+        //add code
+    }
+
+    @Test
     public void observePassTest()throws Exception {
         //add code
     }

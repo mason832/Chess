@@ -1,5 +1,4 @@
 package ui;
-
 import model.AuthData;
 import server.ServerFacade;
 
@@ -52,7 +51,7 @@ public class PostloginClient {
     }
 
     public boolean joinGame(String[] input) {
-        if (input.length!=3) {
+        if (input.length != 3) {
             System.out.println("Usage: join <GAME_ID> <WHITE|BLACK>");
             return false;
         }
@@ -66,8 +65,11 @@ public class PostloginClient {
                 return false;
             }
 
-            server.joinGame(gameID,color ,authData.authToken());
+            server.joinGame(gameID, authData.authToken(), color);
             System.out.println("Joined game " + gameID + " as " + color);
+
+            //print board
+
             return true;
         }
         catch (Exception e) {
