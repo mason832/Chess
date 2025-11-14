@@ -1,4 +1,5 @@
 package server;
+import chess.ChessGame;
 import com.google.gson.Gson;
 import model.AuthData;
 import model.UserData;
@@ -6,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 public class ServerFacade {
     private final String serverUrl;
@@ -153,6 +156,30 @@ public class ServerFacade {
             else {message = "Error: " + conn.getResponseMessage();}
         }
         throw new Exception(message);
+    }
+
+    private ChessGame getGame(String authToken, int gameID) throws Exception {
+        var conn = makeRequest("/game", "GET", null, authToken);
+
+        if (conn.getResponseCode()==200) {
+            try (var input = new InputStreamReader(conn.getInputStream())) {
+                var response = gson.fromJson(input, java.util.Map.class);
+                var games = (java.util.List<java.util.Map<String, Object>>) response.get("games");
+                ChessGame wantedGame = null;
+
+                for (var game : games) {
+                    var id = (double) game.get("gameID");
+                    if (id==gameID) {
+                        //add code
+                    }
+                }
+                return wantedGame;
+            }
+        }
+        else {
+            handleError(conn);
+            return null;
+        }
     }
 
 }
