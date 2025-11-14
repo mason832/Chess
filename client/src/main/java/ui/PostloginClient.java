@@ -76,5 +76,7 @@ public class PostloginClient {
         }
     }
 
-    public void observeGame(String[] input) {}
+    public void observeGame(String[] input) {
+        //add code
+    }
 }

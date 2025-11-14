@@ -2,12 +2,10 @@ package server;
 import com.google.gson.Gson;
 import model.AuthData;
 import model.UserData;
-import model.GameData;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collection;
 
 public class ServerFacade {
     private final String serverUrl;
@@ -72,12 +70,11 @@ public class ServerFacade {
                 var games = (java.util.List<java.util.Map<String, Object>>) response.get("games");
                 int counter = 1;
                 for (var game : games) {
-                    var id = game.get("gameID");
                     var name = game.get("gameName");
                     var white = game.get("whiteUsername");
                     var black = game.get("blackUsername");
 
-                    System.out.printf("Game: "+counter+" | ID: "+id+" | Name: "+name+" | White: "+white+" | Black: "+black+"\n");
+                    System.out.printf("Game: "+counter+" | Name: "+name+" | White: "+white+" | Black: "+black+"\n");
                     counter++;
                 }
             }

@@ -133,12 +133,23 @@ public class ServerFacadeTests {
         AuthData authData = facade.register("joe", "1234", "email");
 
         facade.createGame(authData.authToken(), "testGame");
-        facade.listGames(authData.authToken());
+        assertDoesNotThrow(()->facade.joinGame(1, authData.authToken(), "WHITE"));
+        assertDoesNotThrow(()->facade.joinGame(1, authData.authToken(), "BLACK"));
+
     }
 
     @Test
     public void joinFailTest()throws Exception {
-        //add code
+        AuthData authData = facade.register("joe", "1234", "email");
+
+        facade.createGame(authData.authToken(), "testGame");
+
+        Exception e = assertThrows(Exception.class, ()->facade.joinGame(1, authData.authToken(), null));
+        assertTrue(e.getMessage().contains("bad request"));
+
+        facade.joinGame(1, authData.authToken(), "white");
+        e = assertThrows(Exception.class, ()->facade.joinGame(1, authData.authToken(), "white"));
+        assertTrue(e.getMessage().contains("already taken"));
     }
 
     @Test
