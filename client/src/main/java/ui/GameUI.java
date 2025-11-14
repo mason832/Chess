@@ -7,7 +7,6 @@ public class GameUI {
     public void drawBoard(ChessGame game, String playerColor) {
         if (playerColor.equalsIgnoreCase("WHITE")) {drawWhitePerspective(game);}
         else {drawBlackPerspective(game);}
-
         reset();
     }
 
@@ -26,8 +25,18 @@ public class GameUI {
     }
 
     private void drawBlackPerspective(ChessGame game) {
-        System.out.println("this is a board drawn from black's perspective");
-    }
+        ChessBoard board = game.getBoard();
+
+        System.out.println("    h   g   f   e   d   c   b   a");
+        for (int row = 1; row <= 8; row++) {
+            System.out.print(" " + row + " ");
+            for (int col = 8; col >= 1; col--) {
+                drawSquare(board.getPiece(new ChessPosition(row, col)),
+                        row, col);
+            }
+            System.out.println(" " + row);
+        }
+        System.out.println("    h   g   f   e   d   c   b   a");}
 
     private void reset() {
         System.out.println(RESET_BG_COLOR);
