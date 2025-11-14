@@ -147,6 +147,9 @@ public class SQLGameDAO implements GameDAO{
              try (PreparedStatement ps = conn.prepareStatement(sqlStatement)) {
                 ps.executeUpdate();
              }
+            try (var stmt = conn.prepareStatement("ALTER TABLE gameData AUTO_INCREMENT = 1")) {
+                stmt.executeUpdate();
+            }
         } catch (SQLException e) {throw new DataAccessException(e.getMessage());}
     }
 }

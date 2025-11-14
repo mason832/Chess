@@ -130,7 +130,10 @@ public class ServerFacadeTests {
 
     @Test
     public void joinPassTest()throws Exception {
-        //add code
+        AuthData authData = facade.register("joe", "1234", "email");
+
+        facade.createGame(authData.authToken(), "testGame");
+        facade.listGames(authData.authToken());
     }
 
     @Test
