@@ -1,6 +1,7 @@
 package service;
 import dataaccess.*;
 import model.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,6 +26,10 @@ public class ListGamesTests {
         gameService = new GameService(gameDAO, authDAO);
         userService = new UserService(userDAO, authDAO);
         clearService = new ClearService(authDAO, gameDAO, userDAO);
+    }
+
+    @AfterEach
+    public void cleanup() throws DataAccessException {
         clearService.clear();
     }
 

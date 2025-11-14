@@ -40,7 +40,7 @@ public class PostloginClient {
                 create <NAME> - a game
                 list - games
                 join <ID> [WHITE|BLACK] - a game
-                observe <ID> - a game
+                observe <ID> - a game (unimplemented)
                 logout - when you are done
                 quit - playing chess""");
     }
