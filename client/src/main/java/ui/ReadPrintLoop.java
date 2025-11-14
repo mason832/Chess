@@ -87,7 +87,7 @@ public class ReadPrintLoop {
 
             case "join" -> postlogin.joinGame(input);
 
-            case "observe" -> {}
+            case "observe" -> postlogin.observeGame(input);
 
             default -> System.out.println("This is not a recognized command, use help to see a list of available commands");
         }

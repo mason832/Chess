@@ -85,7 +85,7 @@ public class ServerFacade {
         else {handleError(conn);}
     }
 
-    public void joinGame(int gameID, String playerColor, String authToken) throws Exception {
+    public void joinGame(int gameID, String authToken,String playerColor) throws Exception {
         var body = new java.util.HashMap<String, Object>();
         body.put("gameID", gameID);
         body.put("playerColor", playerColor);

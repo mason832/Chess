@@ -50,10 +50,10 @@ public class PostloginClient {
         return false;
     }
 
-    public boolean joinGame(String[] input) {
+    public void joinGame(String[] input) {
         if (input.length != 3) {
             System.out.println("Usage: join <GAME_ID> <WHITE|BLACK>");
-            return false;
+            return;
         }
 
         try {
@@ -62,7 +62,7 @@ public class PostloginClient {
 
             if (!color.equals("WHITE") && !color.equals("BLACK")) {
                 System.out.println("Color must be WHITE or BLACK");
-                return false;
+                return;
             }
 
             server.joinGame(gameID, authData.authToken(), color);
@@ -70,12 +70,11 @@ public class PostloginClient {
 
             //print board
 
-            return true;
         }
         catch (Exception e) {
             System.out.println("Join failed: " + e.getMessage());
-            return false;
         }
     }
 
+    public void observeGame(String[] input) {}
 }
