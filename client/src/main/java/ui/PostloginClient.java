@@ -51,4 +51,29 @@ public class PostloginClient {
         return false;
     }
 
+    public boolean joinGame(String[] input) {
+        if (input.length!=3) {
+            System.out.println("Usage: join <GAME_ID> <WHITE|BLACK>");
+            return false;
+        }
+
+        try {
+            int gameID = Integer.parseInt(input[1]);
+            String color = input[2].toUpperCase();
+
+            if (!color.equals("WHITE") && !color.equals("BLACK")) {
+                System.out.println("Color must be WHITE or BLACK");
+                return false;
+            }
+
+            server.joinGame(gameID,color ,authData.authToken());
+            System.out.println("Joined game " + gameID + " as " + color);
+            return true;
+        }
+        catch (Exception e) {
+            System.out.println("Join failed: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

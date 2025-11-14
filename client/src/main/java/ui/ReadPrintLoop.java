@@ -85,7 +85,7 @@ public class ReadPrintLoop {
 
             case "list" -> postlogin.list(input);
 
-            case "join" -> {}
+            case "join" -> postlogin.joinGame(input);
 
             case "observe" -> {}
 
