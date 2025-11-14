@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import ui.GameUI;
 
 public class ServerFacade {
     private final String serverUrl;
@@ -94,6 +95,17 @@ public class ServerFacade {
 
         if (conn.getResponseCode()==200) {conn.disconnect();}
         else {handleError(conn);}
+
+        ChessGame chessGame = getGame(authToken, gameID);
+
+        if (chessGame == null) {
+            System.out.println("Could not load game.");
+            return;
+        }
+
+        // Draw board
+        GameUI ui = new GameUI();
+        ui.drawBoard(chessGame, playerColor);
     }
 
     public void observeGame(int gameID) {
@@ -165,21 +177,19 @@ public class ServerFacade {
             try (var input = new InputStreamReader(conn.getInputStream())) {
                 var response = gson.fromJson(input, java.util.Map.class);
                 var games = (java.util.List<java.util.Map<String, Object>>) response.get("games");
-                ChessGame wantedGame = null;
 
                 for (var game : games) {
                     var id = (double) game.get("gameID");
-                    if (id==gameID) {
-                        //add code
+                    if ((int)id==gameID) {
+                        String gameJson = gson.toJson(game.get("game"));
+                        return gson.fromJson(gameJson, ChessGame.class);
                     }
                 }
-                return wantedGame;
             }
         }
         else {
             handleError(conn);
-            return null;
         }
+        return null;
     }
-
 }
