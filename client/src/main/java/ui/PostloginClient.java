@@ -38,6 +38,7 @@ public class PostloginClient {
     public void help() {
         System.out.println("""
                 create <GAME_NAME> - a game
+                help - display this menu
                 list - games
                 join <GAME_NUMBER> [WHITE|BLACK] - a game
                 observe <GAME_NUMBER> - a game (unimplemented)

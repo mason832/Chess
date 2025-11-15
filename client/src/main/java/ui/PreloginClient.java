@@ -15,6 +15,7 @@ public class PreloginClient {
 
     public void help() {
         System.out.println("""
+                help - display this menu
                 register <USERNAME> <PASSWORD> <EMAIL> - to create an account
                 login <USERNAME> <PASSWORD> - to play chess
                 quit - exit the program
