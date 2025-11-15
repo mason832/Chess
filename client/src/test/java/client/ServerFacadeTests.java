@@ -154,13 +154,30 @@ public class ServerFacadeTests {
 
     @Test
     public void observePassTest()throws Exception {
-        //add code
+        AuthData authData = facade.register("joe","1234","email");
+        facade.createGame(authData.authToken(), "test");
+
+        assertDoesNotThrow(()->facade.observeGame(authData.authToken(), 1));
     }
 
     @Test
     public void observeFailTest()throws Exception {
-        //add code
+        AuthData authData = facade.register("joe","1234","email");
+        facade.createGame(authData.authToken(), "test");
+
+        Exception e = assertThrows(Exception.class, ()->facade.observeGame("fakeAuthToken", 1));
+        assertTrue(e.getMessage().contains("unauthorized"));
+
+        e = assertThrows(Exception.class, ()->facade.observeGame(authData.authToken(), 2));
+        assertTrue(e.getMessage().contains("Could not find game"));
     }
 
-    @Test void clear()throws Exception {}
+    @Test void clear()throws Exception {
+        facade.register("joe", "1234", "email");
+        assertThrows(Exception.class, ()->facade.register("joe","1234","email"));
+
+        facade.clear();
+
+        assertDoesNotThrow(()->facade.register("joe","1234","email"));
+    }
 }

@@ -13,15 +13,15 @@ public class GameUI {
     private void drawWhitePerspective(ChessGame game) {
         ChessBoard board = game.getBoard();
 
-        System.out.println("    a   b   c   d   e   f   g   h");
+        System.out.println("\n\n    a   b   c  d   e  f   g   h");
         for (int row = 8; row >= 1; row--) {
             System.out.print(" " + row + " ");
             for (int col = 1; col <= 8; col++) {
-                drawSquare(board.getPiece(new ChessPosition(row, col)), row, col);
+                createTile(board.getPiece(new ChessPosition(row, col)), row, col);
             }
             System.out.println(" " + row);
         }
-        System.out.println("    a   b   c   d   e   f   g   h");
+        System.out.println("    a   b   c  d   e  f   g   h");
     }
 
     private void drawBlackPerspective(ChessGame game) {
@@ -31,7 +31,7 @@ public class GameUI {
         for (int row = 1; row <= 8; row++) {
             System.out.print(" " + row + " ");
             for (int col = 8; col >= 1; col--) {
-                drawSquare(board.getPiece(new ChessPosition(row, col)),
+                createTile(board.getPiece(new ChessPosition(row, col)),
                         row, col);
             }
             System.out.println(" " + row);
@@ -43,7 +43,7 @@ public class GameUI {
         System.out.println(RESET_TEXT_COLOR);
     }
 
-    private void drawSquare(ChessPiece piece, int row, int col) {
+    private void createTile(ChessPiece piece, int row, int col) {
         boolean darkSquare = (row + col) % 2 == 0;
 
         if (!darkSquare) System.out.print(SET_BG_COLOR_LIGHT_GREY);
@@ -52,13 +52,13 @@ public class GameUI {
         if (piece == null) {
             System.out.print(EMPTY);
         } else {
-            System.out.print(pieceToUnicode(piece));
+            System.out.print(pieceToText(piece));
         }
 
         System.out.print(RESET_BG_COLOR);
     }
 
-    private String pieceToUnicode(ChessPiece piece) {
+    private String pieceToText(ChessPiece piece) {
         ChessPiece.PieceType type = piece.getPieceType();
         ChessGame.TeamColor color = piece.getTeamColor();
 

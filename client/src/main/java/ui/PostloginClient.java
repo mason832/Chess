@@ -37,10 +37,10 @@ public class PostloginClient {
 
     public void help() {
         System.out.println("""
-                create <NAME> - a game
+                create <GAME_NAME> - a game
                 list - games
-                join <ID> [WHITE|BLACK] - a game
-                observe <ID> - a game (unimplemented)
+                join <GAME_NUMBER> [WHITE|BLACK] - a game
+                observe <GAME_NUMBER> - a game (unimplemented)
                 logout - when you are done
                 quit - playing chess""");
     }
@@ -52,7 +52,7 @@ public class PostloginClient {
 
     public void joinGame(String[] input) {
         if (input.length != 3) {
-            System.out.println("Usage: join <GAME_ID> <WHITE|BLACK>");
+            System.out.println("Usage: join <GAME_NUMBER> <WHITE|BLACK>");
             return;
         }
 
@@ -67,9 +67,6 @@ public class PostloginClient {
 
             server.joinGame(gameID, authData.authToken(), color);
             System.out.println("Joined game " + gameID + " as " + color);
-
-            //print board
-
         }
         catch (Exception e) {
             System.out.println("Join failed: " + e.getMessage());
@@ -77,6 +74,16 @@ public class PostloginClient {
     }
 
     public void observeGame(String[] input) {
-        //add code
+        if (input.length!=2) {
+            System.out.println("Usage: observe <GAME_NUMBER>");
+            return;
+        }
+
+        try {
+            int gameID = Integer.parseInt(input[1]);
+
+            server.observeGame(authData.authToken(), gameID);
+        }
+        catch (Exception e) {System.out.println("observation failed: " + e.getMessage());}
     }
 }

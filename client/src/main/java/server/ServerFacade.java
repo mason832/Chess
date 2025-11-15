@@ -57,7 +57,7 @@ public class ServerFacade {
         if (conn.getResponseCode()==200) {
             try(var input = new InputStreamReader(conn.getInputStream())) {
                 var response = gson.fromJson(input, java.util.Map.class);
-                System.out.println("Game ID: " + response.get("gameID"));
+                System.out.println("Game number: " + response.get("gameID"));
             }
         }
         else {
@@ -108,8 +108,16 @@ public class ServerFacade {
         ui.drawBoard(chessGame, playerColor);
     }
 
-    public void observeGame(int gameID) {
-        //add code
+    public void observeGame(String authToken, int gameID) throws Exception {
+        ChessGame chessGame = getGame(authToken, gameID);
+
+        if (chessGame == null) {
+            throw new Exception("Could not find game");
+        }
+
+        // Draw board
+        GameUI ui = new GameUI();
+        ui.drawBoard(chessGame, "WHITE");
     }
 
     public void clear() throws Exception {
