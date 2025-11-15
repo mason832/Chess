@@ -27,15 +27,15 @@ public class ReadPrintLoop {
 
             var input = scanner.nextLine().trim().split("\\s+");
 
-            if (input[0].isBlank()) continue;
+            if (input[0].isBlank()) {continue;}
 
             try {
                 var command = input[0].toLowerCase();
 
                 if (!loggedIn) {
-                    if (preLoginCommands(command, input)) break;
+                    if (preLoginCommands(command, input)) {break;}
                 } else {
-                    if (postLoginCommands(command, input)) break;
+                    if (postLoginCommands(command, input)) {break;}
                 }
 
             } catch (Exception e) {System.out.println("Error: " + e.getMessage());}

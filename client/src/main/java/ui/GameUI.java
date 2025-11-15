@@ -46,14 +46,11 @@ public class GameUI {
     private void createTile(ChessPiece piece, int row, int col) {
         boolean darkSquare = (row + col) % 2 == 0;
 
-        if (!darkSquare) System.out.print(SET_BG_COLOR_LIGHT_GREY);
-        else System.out.print(SET_BG_COLOR_DARK_GREY);
+        if (!darkSquare) {System.out.print(SET_BG_COLOR_LIGHT_GREY);}
+        else {System.out.print(SET_BG_COLOR_DARK_GREY);}
 
-        if (piece == null) {
-            System.out.print(EMPTY);
-        } else {
-            System.out.print(pieceToText(piece));
-        }
+        if (piece == null) {System.out.print(EMPTY);}
+        else {System.out.print(pieceToText(piece));}
 
         System.out.print(RESET_BG_COLOR);
     }
